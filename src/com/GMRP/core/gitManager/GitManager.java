@@ -1,6 +1,9 @@
 package com.GMRP.core.gitManager;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.api.errors.NoHeadException;
 import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 
 import java.io.File;
@@ -30,5 +33,39 @@ public class GitManager {
 			e.printStackTrace();
 			return "Unknown Branch";
 		}
+	}
+	
+	public int countFeatureCommits() {
+		int featCount = 0;
+        Iterable<RevCommit> commits;
+		try {
+			commits = git.log().call();
+			for (RevCommit commit : commits) {
+				String message = commit.getShortMessage().toLowerCase();
+				
+				if (message.startsWith("feat:") || message.startsWith("feat(")) {
+					featCount++;
+				}
+			}
+			return featCount;
+		} catch (NoHeadException e) {
+			e.printStackTrace();
+		} catch (GitAPIException e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
+	public int countAllCommits() {
+		try {
+			int count = 0;
+			Iterable<RevCommit> commits = git.log().call();
+			for (RevCommit commit : commits) {
+				count++;
+			}
+			return count;
+		} catch (GitAPIException e) {
+			e.printStackTrace();
+		}
+		return -1;
 	}
 }

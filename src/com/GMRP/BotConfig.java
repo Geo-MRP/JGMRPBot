@@ -11,7 +11,7 @@ public class BotConfig {
 	}
 
 	private BotConfig(String path) {
-		if (path == null || path.isEmpty()t) {
+		if (path == null || path.isEmpty()) {
 			loadFromEnv();
 		} else {
 			loadFromFile(path);
@@ -54,5 +54,13 @@ public class BotConfig {
 
 	public String getOwnerId() {
 		return config.getString("OWNER");
+	}
+	
+	public String getVersion() {
+		return config.getString("VERSION");
+	}
+	
+	public void setVersion(String version) {
+		config.put("VERSION", version);
 	}
 }
