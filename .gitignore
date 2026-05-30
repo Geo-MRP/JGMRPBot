@@ -30,3 +30,6 @@ replay_pid*
 .settings/
 .metadata/
 /lib/
+
+# Environment Variables + Secrets
+.env
