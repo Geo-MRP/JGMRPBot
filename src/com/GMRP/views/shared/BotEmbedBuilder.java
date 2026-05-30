@@ -1,7 +1,6 @@
 package com.GMRP.views.shared;
 
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.JDA;
 
 public class BotEmbedBuilder {
 	private static String avatarUrl;
