@@ -59,7 +59,7 @@ public class GitManager {
 		try {
 			int count = 0;
 			Iterable<RevCommit> commits = git.log().call();
-			for (RevCommit commit : commits) {
+			for (@SuppressWarnings("unused") RevCommit commit : commits) {
 				count++;
 			}
 			return count;

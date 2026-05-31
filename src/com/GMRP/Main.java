@@ -6,6 +6,8 @@ import java.util.*;
 import com.GMRP.core.gitManager.GitManager;
 import com.GMRP.features.SlashCommandController;
 import com.GMRP.features.aboutCommand.AboutEmbedView;
+import com.GMRP.features.helpCommand.HelpCommandController;
+import com.GMRP.features.helpCommand.HelpEmbedView;
 import com.GMRP.views.shared.BotEmbedBuilder;
 import com.GMRP.features.aboutCommand.AboutCommandController;
 
@@ -26,6 +28,9 @@ public class Main {
 
 			AboutEmbedView aboutEmbedView = new AboutEmbedView();
 			slashCommands.add(new AboutCommandController(aboutEmbedView, GMRPRepoManager));
+			
+			HelpEmbedView helpEmbedView = new HelpEmbedView();
+			slashCommands.add(new HelpCommandController(helpEmbedView));
 
 			String myToken = BotConfig.getInstance().getToken();
 			JDABuilder builder = JDABuilder.createDefault(myToken);
