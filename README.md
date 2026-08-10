@@ -5,7 +5,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 # Java GeoFS Military Roleplay Bot
 
 <p align="center">
-  <img src="./assets/images/logo.png" width=30% height=30% />
+  <img src="./src/main/resources/assets/images/logo.png" width=30% height=30% />
 </p>
 
 <p align="center">
