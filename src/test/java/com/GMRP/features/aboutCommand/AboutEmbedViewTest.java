@@ -19,7 +19,7 @@ public class AboutEmbedViewTest {
         assertAll(
                 () -> assertEquals(embed.getTitle(), "About GMRP"),
                 () -> assertEquals(embed.getDescription(), "# GeoFS Military Roleplay Bot\n\nOwned by A\n\n[Dashboard](https://bot.geo-mrp.com/)\nBranch: `B`\nVersion: `C`"),
-                () -> assertEquals(embed.getFooter(), "Made by Denver"),
+                () -> assertEquals(embed.getFooter().getText(), "Made by Denver"),
                 () -> assertEquals(embed.getColor(), java.awt.Color.BLUE)
         );
     }
