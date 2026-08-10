@@ -47,6 +47,7 @@ public class BotConfig {
 		config.put("TOKEN", System.getenv("TOKEN"));
 		config.put("OWNER", System.getenv("OWNER"));
 		config.put("SERVER", System.getenv("SERVER"));
+		config.put("BAIT", System.getenv("BAIT"));
 	}
 
 	public String getToken() {
@@ -60,5 +61,8 @@ public class BotConfig {
 	public String getServerID() {
 		return config.getString("SERVER");
 	}
-
+  
+	public String getBaitChannelId() {
+		return config.getString("BAIT");
+	}
 }
