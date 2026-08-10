@@ -31,5 +31,13 @@ replay_pid*
 .metadata/
 /lib/
 
+# IDEA
+.idea/
+*.iml
+*.iws
+
+#Maven Build directory
+target/
+
 # Environment Variables + Secrets
 .env
