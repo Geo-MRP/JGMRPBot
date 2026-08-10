@@ -46,6 +46,7 @@ public class BotConfig {
 		config = new JSONObject();
 		config.put("TOKEN", System.getenv("TOKEN"));
 		config.put("OWNER", System.getenv("OWNER"));
+		config.put("SERVER", System.getenv("SERVER"));
 	}
 
 	public String getToken() {
@@ -58,6 +59,10 @@ public class BotConfig {
 	
 	public String getVersion() {
 		return config.getString("VERSION");
+	}
+	
+	public String getServerID() {
+		return config.getString("SERVER");
 	}
 	
 	public void setVersion(String version) {
