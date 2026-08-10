@@ -1,5 +1,21 @@
 # GeoFS Military Roleplay Bot
+
 This is a JDA-Based Discord Bot for the GeoFS Military Roleplay Community.
 
+## License
 
-This project is source-available but not open-source. All rights reserved. You may not copy, distribute, or run your own instance of this software.
+JGMRPBot - Main Discord Bot for GMRP
+Copyright (C) 2026 NickFury001
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
