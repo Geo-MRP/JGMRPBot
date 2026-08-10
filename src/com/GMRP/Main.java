@@ -13,6 +13,7 @@ import com.GMRP.features.aboutCommand.AboutCommandController;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 public class Main {
@@ -44,14 +45,17 @@ public class Main {
 			// set bot of BotEmbedBuilder
 			BotEmbedBuilder.setAvatarUrl(jda.getSelfUser().getAvatarUrl());
 
-			// Batch Register the Slash Commands
+			// Batch Register the Slash Commands to the server
 			List<SlashCommandData> commandSetups = new ArrayList<>();
+			
 			for (SlashCommandController controller : slashCommands) {
 				commandSetups.add(controller.getCommandSetup());
 			}
 
-			// Push the list of command setups to Discord
-			jda.updateCommands().addCommands(commandSetups).queue();
+			// Guild to save the commands to
+			Guild guild = jda.getGuildById(BotConfig.getInstance().getServerID());
+			// Push the list of command setups to the guild
+			guild.updateCommands().addCommands(commandSetups).queue();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
