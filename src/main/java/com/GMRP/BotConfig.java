@@ -56,16 +56,9 @@ public class BotConfig {
 	public String getOwnerId() {
 		return config.getString("OWNER");
 	}
-	
-	public String getVersion() {
-		return config.getString("VERSION");
-	}
-	
+
 	public String getServerID() {
 		return config.getString("SERVER");
 	}
-	
-	public void setVersion(String version) {
-		config.put("VERSION", version);
-	}
+
 }
