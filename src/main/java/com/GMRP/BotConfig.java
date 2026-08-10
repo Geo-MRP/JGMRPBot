@@ -47,6 +47,7 @@ public class BotConfig {
 		config.put("TOKEN", System.getenv("TOKEN"));
 		config.put("OWNER", System.getenv("OWNER"));
 		config.put("SERVER", System.getenv("SERVER"));
+		config.put("BAIT", System.getenv("BAIT"));
 	}
 
 	public String getToken() {
@@ -56,16 +57,13 @@ public class BotConfig {
 	public String getOwnerId() {
 		return config.getString("OWNER");
 	}
-	
-	public String getVersion() {
-		return config.getString("VERSION");
-	}
-	
+
 	public String getServerID() {
 		return config.getString("SERVER");
 	}
-	
-	public void setVersion(String version) {
-		config.put("VERSION", version);
+
+	public String getBaitChannelId() {
+		return config.getString("BAIT");
 	}
+
 }
