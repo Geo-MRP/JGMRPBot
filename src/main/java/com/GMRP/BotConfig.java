@@ -61,7 +61,7 @@ public class BotConfig {
 	public String getServerID() {
 		return config.getString("SERVER");
 	}
-  
+
 	public String getBaitChannelId() {
 		return config.getString("BAIT");
 	}

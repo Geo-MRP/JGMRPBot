@@ -25,14 +25,14 @@ public class Main {
 		// GMRP Repo
 		BotConfig.init();
 		try {
-			GitManager GMRPRepoManager = new GitManager(".");
+			GitManager repositoryManager = new GitManager(".");
 
 			// Slash Commands
 			List<SlashCommandController> slashCommands = new ArrayList<>();
 
 			AboutEmbedView aboutEmbedView = new AboutEmbedView();
-			slashCommands.add(new AboutCommandController(aboutEmbedView, GMRPRepoManager));
-			
+			slashCommands.add(new AboutCommandController(aboutEmbedView, repositoryManager));
+
 			HelpEmbedView helpEmbedView = new HelpEmbedView();
 			slashCommands.add(new HelpCommandController(helpEmbedView));
 
@@ -60,7 +60,7 @@ public class Main {
 
 			// Batch Register the Slash Commands to the server
 			List<SlashCommandData> commandSetups = new ArrayList<>();
-			
+
 			for (SlashCommandController controller : slashCommands) {
 				commandSetups.add(controller.getCommandSetup());
 			}
