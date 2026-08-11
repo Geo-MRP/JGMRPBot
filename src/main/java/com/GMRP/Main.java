@@ -25,13 +25,13 @@ public class Main {
 		// GMRP Repo
 		BotConfig.init();
 		try {
-			GitManager GMRPRepoManager = new GitManager(".");
+			GitManager repositoryManager = new GitManager(".");
 
 			// Slash Commands
 			List<SlashCommandController> slashCommands = new ArrayList<>();
 
 			AboutEmbedView aboutEmbedView = new AboutEmbedView();
-			slashCommands.add(new AboutCommandController(aboutEmbedView, GMRPRepoManager));
+			slashCommands.add(new AboutCommandController(aboutEmbedView, repositoryManager));
 
 			HelpEmbedView helpEmbedView = new HelpEmbedView();
 			slashCommands.add(new HelpCommandController(helpEmbedView));
