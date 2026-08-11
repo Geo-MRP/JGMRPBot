@@ -16,11 +16,10 @@ JGMRPBot uses Maven to make setup incredibly simple and straightforward.
 1. Create an issue for the bug you want to fix or the feature that you want to add.
 2. Create your own fork on GitHub, then clone your fork.
 3. Configure the necessary .env file.
-4. Write your code in your local copy. It's good practice to create a branch for each new issue you work on, although not compulsory.
-5. To run the test suite, first install the dependencies by running mvn clean install, then mvn test.
-6. Ensure your code is linted by running `mvn spotless:apply` -- fix any issue you see listed.
-7. If the tests pass, you can commit your changes to your fork and then create a pull request from there. Make sure to reference your issue from the pull request comments by including the issue number e.g. #123.
-
+4. Write your code in your local copy. You must create a new branch for each new issue you work on (e.g., `feat/new-command`). Do not commit directly to your `main` branch.
+5. Format your code by running `mvn spotless:apply`. This will automatically enforce our 4-space tab indentation and organize imports.
+6. Run the test suite and the Checkstyle linter by running `mvn clean install`. If Checkstyle lists any structural or naming convention errors, you must fix them before committing.
+7. If the build succeeds, commit your changes to your branch and create a pull request. Make sure to reference your issue from the pull request comments by including the issue number (e.g., "Fixes #123").
 ## About Pull Requests
 Pull requests must be made to the `develop` branch. This is due to the fact that the `main` branch is used for releases, and the `develop` branch is used for development.
 
