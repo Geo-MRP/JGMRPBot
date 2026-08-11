@@ -4,7 +4,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 
 public class BotEmbedBuilder {
 	private static String avatarUrl;
-	
+
 	public static void setAvatarUrl(String avatarUrl) {
 		BotEmbedBuilder.avatarUrl = avatarUrl;
 	}

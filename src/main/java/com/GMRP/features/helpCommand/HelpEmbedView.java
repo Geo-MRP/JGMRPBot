@@ -19,7 +19,7 @@ public class HelpEmbedView {
 			descBuilder.append(command.getAsMention() + ": " + command.getDescription() + "\n");
 		}
 		String description = descBuilder.toString();
-		
+
 		embed.setDescription(description);
 
 		return embed.build();

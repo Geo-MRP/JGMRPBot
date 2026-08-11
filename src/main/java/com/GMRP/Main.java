@@ -32,7 +32,7 @@ public class Main {
 
 			AboutEmbedView aboutEmbedView = new AboutEmbedView();
 			slashCommands.add(new AboutCommandController(aboutEmbedView, GMRPRepoManager));
-			
+
 			HelpEmbedView helpEmbedView = new HelpEmbedView();
 			slashCommands.add(new HelpCommandController(helpEmbedView));
 
@@ -60,7 +60,7 @@ public class Main {
 
 			// Batch Register the Slash Commands to the server
 			List<SlashCommandData> commandSetups = new ArrayList<>();
-			
+
 			for (SlashCommandController controller : slashCommands) {
 				commandSetups.add(controller.getCommandSetup());
 			}

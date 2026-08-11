@@ -12,7 +12,7 @@ import java.io.IOException;
 public class GitManager {
 	private Repository repository;
 	private Git git;
-	
+
 	public GitManager(String path) throws IOException {
 		FileRepositoryBuilder builder = new FileRepositoryBuilder();
 		this.repository = builder.setGitDir(new File(path, ".git"))
@@ -24,7 +24,9 @@ public class GitManager {
 
 	/**
 	 * Simple current branch getter
-	 * @return Returns a string containing the branch this GitManager Object's repository is currently in. e.g. "origin/main"
+	 * 
+	 * @return Returns a string containing the branch this GitManager Object's
+	 *         repository is currently in. e.g. "origin/main"
 	 */
 	public String getCurrentBranch() {
 		try {
@@ -34,15 +36,15 @@ public class GitManager {
 			return "Unknown Branch";
 		}
 	}
-	
+
 	public int countFeatureCommits() {
 		int featCount = 0;
-        Iterable<RevCommit> commits;
+		Iterable<RevCommit> commits;
 		try {
 			commits = git.log().call();
 			for (RevCommit commit : commits) {
 				String message = commit.getShortMessage().toLowerCase();
-				
+
 				if (message.startsWith("feat:") || message.startsWith("feat(")) {
 					featCount++;
 				}
@@ -59,7 +61,8 @@ public class GitManager {
 		try {
 			int count = 0;
 			Iterable<RevCommit> commits = git.log().call();
-			for (@SuppressWarnings("unused") RevCommit commit : commits) {
+			for (@SuppressWarnings("unused")
+			RevCommit commit : commits) {
 				count++;
 			}
 			return count;
