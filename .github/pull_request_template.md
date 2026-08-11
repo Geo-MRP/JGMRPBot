@@ -19,7 +19,7 @@ Fixes #
 ## Code Quality & Testing Checklist
 <!-- You must check all the boxes below before submitting your PR. -->
 - [ ] I have targeted the `develop` branch.
-- [ ] I have tested my changes locally using a dummy SQLite database (NOT the production database).
+- [ ] I have tested my changes locally. <!-- using a dummy SQLite database (NOT the production database). -->
 - [ ] I have formatted my code by running `mvn spotless:apply`.
 - [ ] I have verified my logic and tests pass by running `mvn clean install` without any Checkstyle or JUnit errors.
 - [ ] My commits follow standard naming conventions and provide clear history.
