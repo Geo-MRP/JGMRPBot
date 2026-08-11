@@ -14,6 +14,10 @@ Thank you for considering contributing to the JGMRPBot repo. Contributions are a
 JGMRPBot uses Maven to make setup incredibly simple and straightforward.
 
 1. Create an issue for the bug you want to fix or the feature that you want to add.
-2. Create your own fork on GitHub, then checkout your fork.
-3. Write your code in your local copy. It's good practice to create a branch for each new issue you work on, although not compulsory.
-4. To run the test suite, first install the dependencies by running mvn clean install, then mvn test.
+2. Create your own fork on GitHub, then clone your fork.
+3. Configure the necessary .env file.
+4. Write your code in your local copy. It's good practice to create a branch for each new issue you work on, although not compulsory.
+5. To run the test suite, first install the dependencies by running mvn clean install, then mvn test.
+6. Ensure your code is linted by running `mvn spotless:apply` -- fix any issue you see listed.
+7. If the tests pass, you can commit your changes to your fork and then create a pull request from there. Make sure to reference your issue from the pull request comments by including the issue number e.g. #123.
+
