@@ -8,13 +8,13 @@ import java.io.IOException;
 public class GitManager {
 	private final Repository repository;
 
-    public GitManager(String path) throws IOException {
+	public GitManager(String path) throws IOException {
 		FileRepositoryBuilder builder = new FileRepositoryBuilder();
 		this.repository = builder.setGitDir(new File(path, ".git"))
 				.readEnvironment() // scan environment GIT_* variables
 				.findGitDir() // scan up the file system tree
 				.build();
-    }
+	}
 
 	/**
 	 * Simple current branch getter
