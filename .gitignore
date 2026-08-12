@@ -43,6 +43,7 @@ target/
 .env
 
 # Local SQLite DB
+!data/.gitkeep
 *.db
 *.db-journal
 *.db-wal
