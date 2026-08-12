@@ -45,24 +45,34 @@ public class BotConfig {
 	public void loadFromEnv() {
 		config = new JSONObject();
 		config.put("TOKEN", System.getenv("TOKEN"));
-		config.put("OWNER", System.getenv("OWNER"));
-		config.put("SERVER", System.getenv("SERVER"));
-		config.put("BAIT", System.getenv("BAIT"));
+		config.put("DB_TYPE", System.getenv("DB_TYPE")); // "oracle" or "sqlite"
+		config.put("DB_USER", System.getenv("DB_USER"));
+		config.put("DB_PASSWORD", System.getenv("DB_PASSWORD"));
+		config.put("DB_CONNECT_STRING", System.getenv("DB_CONNECT_STRING")); // Oracle only
+		config.put("DB_SQLITE_PATH", System.getenv("DB_SQLITE_PATH")); // e.g. "data/database.db"
 	}
 
 	public String getToken() {
 		return config.getString("TOKEN");
 	}
 
-	public String getOwnerId() {
-		return config.getString("OWNER");
+	public String getDbType() {
+		return config.optString("DB_TYPE", "sqlite");
 	}
 
-	public String getServerID() {
-		return config.getString("SERVER");
+	public String getDbUser() {
+		return config.optString("DB_USER", "");
 	}
 
-	public String getBaitChannelId() {
-		return config.getString("BAIT");
+	public String getDbPassword() {
+		return config.optString("DB_PASSWORD", "");
+	}
+
+	public String getDbConnectString() {
+		return config.optString("DB_CONNECT_STRING", "");
+	}
+
+	public String getDbSqlitePath() {
+		return config.optString("DB_SQLITE_PATH", "data/database.db");
 	}
 }
