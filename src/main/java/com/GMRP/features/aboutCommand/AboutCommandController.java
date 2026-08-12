@@ -45,8 +45,10 @@ public class AboutCommandController extends ListenerAdapter implements SlashComm
 						.prepareStatement("SELECT CONFIG_VALUE FROM CONFIG WHERE CONFIG_KEY = ?")) {
 			preparedStatement.setString(1, "OWNER");
 			try (ResultSet resultSet = preparedStatement.executeQuery()) {
-				if (!resultSet.next())
+				if (!resultSet.next()) {
 					event.reply("Owner ID not found in the database.").setEphemeral(true).queue();
+					return;
+				}
 				String ownerId = resultSet.getString(1);
 				String ownerMention = "<@" + ownerId + ">";
 				String currentBranch = gitManager.getCurrentBranch();
