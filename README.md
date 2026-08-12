@@ -43,7 +43,7 @@ cd JGMRPBot
 mvn clean install
 ```
 
-### Setting up the Environment
+### Setting up the Local Environment
 To start off, you'll need to create a new Discord bot and invite it to your server. You can find instructions on how to do that [here](https://docs.discord.com/developers/quick-start/getting-started#step-1-creating-an-app). Once your bot is set up, configure the environment ariables to have the bot's token:
 ```bash
 export TOKEN=<your_bot_token>
@@ -73,23 +73,17 @@ export DB_PASSWORD=<your_db_password>
 export DB_CONNECTION_STRING=<your_oracle_connection_string>
 ```
 
-## License
+### Running the Bot
 
-JGMRPBot - Main Discord Bot for GMRP
-Copyright (C) 2026 NickFury001
+Once the SQL DB is configured, you can simply build the jar with dependencies:
+```bash
+mvn clean package
+```
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published
-by the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
+Finally, to run the bot, run the jar with dependencies:
+```bash
+java -jar target/JGMRPBot-1.0-SNAPSHOT-jar-with-dependencies.jar
+```
 
 ## Support
 Support Geo-MRP via PayPal or Ko-Fi. Every contribution helps fund ongoing development, long-term maintenance, and server hosting costs. PayPal is the preferred way to support the project.
@@ -109,3 +103,21 @@ The guide covers:
 - AI-assisted contributions
 - Pull request expectations
 - Testing guidelines
+
+## License
+
+JGMRPBot - Main Discord Bot for GMRP
+Copyright (C) 2026 NickFury001
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
