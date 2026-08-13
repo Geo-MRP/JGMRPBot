@@ -31,7 +31,7 @@ This repository aims to cover the Discord bot behavior of GMRPBot. That is, it's
 ### Initial Setup
 
 Before we get started, you'll need to set up your local environment and get the code from the repository.
-If you don't have [Java 26 or later](https://www.oracle.com/es/java/technologies/downloads/) and [Maven](https://maven.apache.org/install.html) installed, install those first. 
+If you don't have [Java 26 or later](https://www.oracle.com/java/technologies/downloads/) and [Maven](https://maven.apache.org/install.html) installed, install those first. 
 
 Clone the repository:
 ```bash
@@ -98,7 +98,7 @@ The guide covers:
 
 ## Security
 
-We take the security of this project seriously. If you discover a security vulnerability, please do not report it in the public issues tracker. Instead, refer to our [Security Policy](SECURITY.md) for instructions on how to properly and responsibly report vulnerabilities.
+We take the security of this project seriously. If you discover a security vulnerability, please do not report it in the public issues tracker. Instead, refer to our [Security Policy](docs/SECURITY.md) for instructions on how to properly and responsibly report vulnerabilities.
 
 ## Support
 Support Geo-MRP via PayPal or Ko-Fi. Every contribution helps fund ongoing development, long-term maintenance, and server hosting costs. PayPal is the preferred way to support the project.
