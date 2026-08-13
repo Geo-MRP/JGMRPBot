@@ -3,6 +3,7 @@ updates:
   # Maven dependencies (pom.xml)
   - package-ecosystem: "maven"
     directory: "/"
+    target-branch: "develop"          # ← important
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 5
@@ -11,9 +12,10 @@ updates:
     commit-message:
       prefix: "deps"
 
-  # Keep GitHub Actions up to date too (optional but recommended)
+  # GitHub Actions
   - package-ecosystem: "github-actions"
     directory: "/"
+    target-branch: "develop"          # ← important
     schedule:
       interval: "weekly"
     labels:
