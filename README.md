@@ -96,6 +96,10 @@ The guide covers:
 - Pull request expectations
 - Testing guidelines
 
+## Security
+
+We take the security of this project seriously. If you discover a security vulnerability, please do not report it in the public issues tracker. Instead, refer to our [Security Policy](SECURITY.md) for instructions on how to properly and responsibly report vulnerabilities.
+
 ## Support
 Support Geo-MRP via PayPal or Ko-Fi. Every contribution helps fund ongoing development, long-term maintenance, and server hosting costs. PayPal is the preferred way to support the project.
 
