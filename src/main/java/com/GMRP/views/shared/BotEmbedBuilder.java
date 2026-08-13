@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
 package com.GMRP.views.shared;
 
 import net.dv8tion.jda.api.EmbedBuilder;

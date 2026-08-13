@@ -1,7 +1,7 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
 package com.GMRP.features.moderation.botBait;
 
-import com.GMRP.BotConfig;
-
+import com.GMRP.core.databaseManager.DatabaseManager;
 import com.GMRP.features.LoopController;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -9,13 +9,19 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.Permission;
 import org.jetbrains.annotations.NotNull;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
 
 public class BotBaitEventController extends ListenerAdapter implements LoopController {
 	BotBaitView view;
+	DatabaseManager databaseManager;
 
-	public BotBaitEventController(BotBaitView view) {
+	public BotBaitEventController(BotBaitView view, DatabaseManager databaseManager) {
 		this.view = view;
+		this.databaseManager = databaseManager;
 	}
 
 	@Override
@@ -25,8 +31,20 @@ public class BotBaitEventController extends ListenerAdapter implements LoopContr
 			return;
 
 		// Only applies to the Bot Bait channel.
-		if (!event.getChannel().getId().equals(BotConfig.getInstance().getBaitChannelId()))
-			return;
+		try (Connection connection = databaseManager.getConnection();
+				PreparedStatement preparedStatement = connection
+						.prepareStatement("SELECT CONFIG_VALUE FROM CONFIG WHERE CONFIG_KEY = ?")) {
+			preparedStatement.setString(1, "BAIT");
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				// there is no bait channel
+				if (!resultSet.next())
+					return;
+				if (!event.getChannel().getId().equals(resultSet.getString(1)))
+					return;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
 		// Don't ban actual bots nor try to ban a webhook.
 		if (event.getAuthor().isBot() || event.isWebhookMessage())

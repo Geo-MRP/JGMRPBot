@@ -41,3 +41,11 @@ target/
 
 # Environment Variables + Secrets
 .env
+
+# Local SQLite DB
+!data/.gitkeep
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+data/*.db

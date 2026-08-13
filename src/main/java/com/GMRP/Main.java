@@ -1,8 +1,14 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
 package com.GMRP;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
+import com.GMRP.core.databaseManager.DatabaseManager;
 import com.GMRP.core.gitManager.GitManager;
 import com.GMRP.features.LoopController;
 import com.GMRP.features.SlashCommandController;
@@ -20,18 +26,20 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
 public class Main {
-	public static void main(String[] args) {
+	static void main(String[] args) {
 		// Initialize Models
 		// GMRP Repo
 		BotConfig.init();
 		try {
 			GitManager repositoryManager = new GitManager(".");
+			DatabaseManager databaseManager = new DatabaseManager();
+			databaseManager.testConnection();
 
 			// Slash Commands
 			List<SlashCommandController> slashCommands = new ArrayList<>();
 
 			AboutEmbedView aboutEmbedView = new AboutEmbedView();
-			slashCommands.add(new AboutCommandController(aboutEmbedView, repositoryManager));
+			slashCommands.add(new AboutCommandController(aboutEmbedView, repositoryManager, databaseManager));
 
 			HelpEmbedView helpEmbedView = new HelpEmbedView();
 			slashCommands.add(new HelpCommandController(helpEmbedView));
@@ -47,7 +55,7 @@ public class Main {
 			List<LoopController> loops = new ArrayList<>();
 
 			BotBaitView botBaitEmbedView = new BotBaitView();
-			loops.add(new BotBaitEventController(botBaitEmbedView));
+			loops.add(new BotBaitEventController(botBaitEmbedView, databaseManager));
 
 			for (LoopController loop : loops) {
 				builder.addEventListeners(loop);
@@ -66,13 +74,25 @@ public class Main {
 			}
 
 			// Guild to save the commands to
-			Guild guild = jda.getGuildById(BotConfig.getInstance().getServerID());
+			Guild guild;
+			try (Connection connection = databaseManager.getConnection();
+					PreparedStatement preparedStatement = connection
+							.prepareStatement("SELECT CONFIG_VALUE FROM CONFIG WHERE CONFIG_KEY = ?")) {
+				preparedStatement.setString(1, "SERVER");
+				try (ResultSet resultSet = preparedStatement.executeQuery()) {
+					if (!resultSet.next())
+						throw new RuntimeException("Guild ID not found in the database.");
+					guild = jda.getGuildById(resultSet.getString(1));
+				}
+			}
+
 			// Push the list of command setups to the guild
 			guild.updateCommands().addCommands(commandSetups).queue();
-		} catch (IOException e) {
+			Runtime.getRuntime().addShutdownHook(new Thread(databaseManager::close));
+		} catch (IOException | InterruptedException e) {
 			e.printStackTrace();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
 		}
 	}
 }
