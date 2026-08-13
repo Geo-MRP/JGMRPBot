@@ -96,6 +96,9 @@ The guide covers:
 - Pull request expectations
 - Testing guidelines
 
+For an overview of the codebase structure, see **[ARCHITECTURE.md](docs/ARCHITECTURE.md)**.
+
+
 ## Security
 
 We take the security of this project seriously. If you discover a security vulnerability, please do not report it in the public issues tracker. Instead, refer to our [Security Policy](docs/SECURITY.md) for instructions on how to properly and responsibly report vulnerabilities.
