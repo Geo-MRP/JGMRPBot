@@ -85,14 +85,6 @@ Finally, to run the bot, run the jar with dependencies:
 java -jar target/JGMRPBot-1.0-SNAPSHOT-jar-with-dependencies.jar
 ```
 
-## Support
-Support Geo-MRP via PayPal or Ko-Fi. Every contribution helps fund ongoing development, long-term maintenance, and server hosting costs. PayPal is the preferred way to support the project.
-
-[![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/GMRPTech)
-[![Ko-fi](https://img.shields.io/badge/Ko--fi-F16061?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/GMRP)
-
-Supporters get special perks in the GMRP Community depending on the amount donated. [Join the server](https://discord.com/invite/updVrRXm4P) to [learn more](https://discord.com/channels/1097877635645849620/1256654929481830532/1460326591870537770).
-
 ## Contributing
 Before opening an issue or pull request, please read the contribution guidelines:
 
@@ -103,6 +95,14 @@ The guide covers:
 - AI-assisted contributions
 - Pull request expectations
 - Testing guidelines
+
+## Support
+Support Geo-MRP via PayPal or Ko-Fi. Every contribution helps fund ongoing development, long-term maintenance, and server hosting costs. PayPal is the preferred way to support the project.
+
+[![PayPal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://paypal.me/GMRPTech)
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-F16061?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/GMRP)
+
+Supporters get special perks in the GMRP Community depending on the amount donated. [Join the server](https://discord.com/invite/updVrRXm4P) to [learn more](https://discord.com/channels/1097877635645849620/1256654929481830532/1460326591870537770).
 
 ## License
 
