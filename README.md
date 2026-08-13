@@ -44,7 +44,7 @@ mvn clean install
 ```
 
 ### Setting up the Local Environment
-To start off, you'll need to create a new Discord bot and invite it to your server. You can find instructions on how to do that [here](https://docs.discord.com/developers/quick-start/getting-started#step-1-creating-an-app). Once your bot is set up, configure the environment ariables to have the bot's token:
+To start off, you'll need to create a new Discord bot and invite it to your server. You can find instructions on how to do that [here](https://docs.discord.com/developers/quick-start/getting-started#step-1-creating-an-app). Once your bot is set up, configure the environment variables to have the bot's token:
 ```bash
 export TOKEN=<your_bot_token>
 ```
@@ -96,7 +96,7 @@ Supporters get special perks in the GMRP Community depending on the amount donat
 ## Contributing
 Before opening an issue or pull request, please read the contribution guidelines:
 
-**[CONTRIBUTING.md](./CONTRIBUTING.md)**
+**[CONTRIBUTING.md](docs/CONTRIBUTING.md)**
 
 The guide covers:
 - Coding style and formatting
