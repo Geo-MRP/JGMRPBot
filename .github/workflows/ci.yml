@@ -15,7 +15,7 @@ jobs:
     steps:
       # Grab your repository's code
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       # Install Java 21
       - name: Set up JDK 26
