@@ -31,7 +31,7 @@ This repository aims to cover the Discord bot behavior of GMRPBot. That is, it's
 ### Initial Setup
 
 Before we get started, you'll need to set up your local environment and get the code from the repository.
-If you don't have [Java 26 or later](https://www.oracle.com/es/java/technologies/downloads/) and [Maven](https://maven.apache.org/install.html) installed, install those first. 
+If you don't have [Java 26 or later](https://www.oracle.com/java/technologies/downloads/) and [Maven](https://maven.apache.org/install.html) installed, install those first. 
 
 Clone the repository:
 ```bash
@@ -44,7 +44,7 @@ mvn clean install
 ```
 
 ### Setting up the Local Environment
-To start off, you'll need to create a new Discord bot and invite it to your server. You can find instructions on how to do that [here](https://docs.discord.com/developers/quick-start/getting-started#step-1-creating-an-app). Once your bot is set up, configure the environment ariables to have the bot's token:
+To start off, you'll need to create a new Discord bot and invite it to your server. You can find instructions on how to do that [here](https://docs.discord.com/developers/quick-start/getting-started#step-1-creating-an-app). Once your bot is set up, configure the environment variables to have the bot's token:
 ```bash
 export TOKEN=<your_bot_token>
 ```
@@ -85,6 +85,24 @@ Finally, to run the bot, run the jar with dependencies:
 java -jar target/JGMRPBot-1.0-SNAPSHOT-jar-with-dependencies.jar
 ```
 
+## Contributing
+Before opening an issue or pull request, please read the contribution guidelines:
+
+**[CONTRIBUTING.md](docs/CONTRIBUTING.md)**
+
+The guide covers:
+- Coding style and formatting
+- AI-assisted contributions
+- Pull request expectations
+- Testing guidelines
+
+For an overview of the codebase structure, see **[ARCHITECTURE.md](docs/ARCHITECTURE.md)**.
+
+
+## Security
+
+We take the security of this project seriously. If you discover a security vulnerability, please do not report it in the public issues tracker. Instead, refer to our [Security Policy](docs/SECURITY.md) for instructions on how to properly and responsibly report vulnerabilities.
+
 ## Support
 Support Geo-MRP via PayPal or Ko-Fi. Every contribution helps fund ongoing development, long-term maintenance, and server hosting costs. PayPal is the preferred way to support the project.
 
@@ -92,17 +110,6 @@ Support Geo-MRP via PayPal or Ko-Fi. Every contribution helps fund ongoing devel
 [![Ko-fi](https://img.shields.io/badge/Ko--fi-F16061?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/GMRP)
 
 Supporters get special perks in the GMRP Community depending on the amount donated. [Join the server](https://discord.com/invite/updVrRXm4P) to [learn more](https://discord.com/channels/1097877635645849620/1256654929481830532/1460326591870537770).
-
-## Contributing
-Before opening an issue or pull request, please read the contribution guidelines:
-
-**[CONTRIBUTING.md](./CONTRIBUTING.md)**
-
-The guide covers:
-- Coding style and formatting
-- AI-assisted contributions
-- Pull request expectations
-- Testing guidelines
 
 ## License
 
