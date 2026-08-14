@@ -8,10 +8,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-import com.GMRP.core.databaseManager.DatabaseManager;
+import com.GMRP.core.databaseManager.DatabaseManagerFactory;
+import com.GMRP.core.databaseManager.IDatabaseManager;
 import com.GMRP.core.gitManager.GitManager;
-import com.GMRP.features.LoopController;
-import com.GMRP.features.SlashCommandController;
+import com.GMRP.features.ILoopController;
+import com.GMRP.features.ISlashCommandController;
 import com.GMRP.features.aboutCommand.AboutEmbedView;
 import com.GMRP.features.helpCommand.HelpCommandController;
 import com.GMRP.features.helpCommand.HelpEmbedView;
@@ -32,11 +33,11 @@ public class Main {
 		BotConfig.init();
 		try {
 			GitManager repositoryManager = new GitManager(".");
-			DatabaseManager databaseManager = new DatabaseManager();
+			IDatabaseManager databaseManager = DatabaseManagerFactory.create();
 			databaseManager.testConnection();
 
 			// Slash Commands
-			List<SlashCommandController> slashCommands = new ArrayList<>();
+			List<ISlashCommandController> slashCommands = new ArrayList<>();
 
 			AboutEmbedView aboutEmbedView = new AboutEmbedView();
 			slashCommands.add(new AboutCommandController(aboutEmbedView, repositoryManager, databaseManager));
@@ -47,17 +48,17 @@ public class Main {
 			String myToken = BotConfig.getInstance().getToken();
 			JDABuilder builder = JDABuilder.createDefault(myToken);
 
-			for (SlashCommandController controller : slashCommands) {
+			for (ISlashCommandController controller : slashCommands) {
 				builder.addEventListeners(controller); // Tell JDA to listen to them
 			}
 
 			// Loops
-			List<LoopController> loops = new ArrayList<>();
+			List<ILoopController> loops = new ArrayList<>();
 
 			BotBaitView botBaitEmbedView = new BotBaitView();
 			loops.add(new BotBaitEventController(botBaitEmbedView, databaseManager));
 
-			for (LoopController loop : loops) {
+			for (ILoopController loop : loops) {
 				builder.addEventListeners(loop);
 			}
 
@@ -69,7 +70,7 @@ public class Main {
 			// Batch Register the Slash Commands to the server
 			List<SlashCommandData> commandSetups = new ArrayList<>();
 
-			for (SlashCommandController controller : slashCommands) {
+			for (ISlashCommandController controller : slashCommands) {
 				commandSetups.add(controller.getCommandSetup());
 			}
 

@@ -1,9 +1,9 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
 package com.GMRP.features.aboutCommand;
 
-import com.GMRP.core.databaseManager.DatabaseManager;
+import com.GMRP.core.databaseManager.IDatabaseManager;
 import com.GMRP.core.gitManager.GitManager;
-import com.GMRP.features.SlashCommandController;
+import com.GMRP.features.ISlashCommandController;
 
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -16,15 +16,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class AboutCommandController extends ListenerAdapter implements SlashCommandController {
+public class AboutCommandController extends ListenerAdapter implements ISlashCommandController {
 	private final AboutEmbedView view;
 	private final GitManager gitManager;
-	private final DatabaseManager databaseManager;
+	private final IDatabaseManager databaseManager;
 
 	// Constructor necessary due to having a View and/or Model.
 	// We don't want to create a new instance of a View or Model each time the
 	// command is run.
-	public AboutCommandController(AboutEmbedView view, GitManager gitManager, DatabaseManager databaseManager) {
+	public AboutCommandController(AboutEmbedView view, GitManager gitManager, IDatabaseManager databaseManager) {
 		this.view = view;
 		this.gitManager = gitManager;
 		this.databaseManager = databaseManager;

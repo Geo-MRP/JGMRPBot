@@ -82,7 +82,7 @@ mvn clean package
 
 Finally, to run the bot, run the jar with dependencies:
 ```bash
-java -jar target/JGMRPBot-1.0-SNAPSHOT-jar-with-dependencies.jar
+java -jar target/JGMRPBot-x.x.x-jar-with-dependencies.jar
 ```
 
 ## Contributing
