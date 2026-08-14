@@ -31,7 +31,10 @@ com.GMRP
 │
 ├── core/
 │   ├── databaseManager/
-│   │   └── DatabaseManager.java   # SQLite or Oracle connection handling
+│   │   └── IDatabaseManager.java       # Database Management Interface
+│   │   └── DatabaseManagerOracle.java  # Oracle Database Implementation
+│   │   └── DatabaseManagerSQLite.java  # SQLite Database Implementation
+│   │   └── DatabaseManagerFactory.java # Database Manager Factory
 │   └── gitManager/
 │       └── GitManager.java        # Reads current Git branch (used by /about)
 │
@@ -86,14 +89,15 @@ Singleton that reads configuration from environment variables:
 
 Most runtime values that used to live in environment variables (owner ID, server ID, bait channel) are now stored in the `CONFIG` table and queried at runtime.
 
-### DatabaseManager
+### Database access (`IDatabaseManager`)
 
 Provides a single entry point for database access:
 
-- Supports **SQLite** (local development) and **Oracle** (production) via the same API.
-- `getConnection()` returns a `Connection` that callers must close (prefer try-with-resources).
-- `testConnection()` is called at startup.
-- Implements `AutoCloseable` so the Oracle pool can be destroyed cleanly on shutdown.
+- **`IDatabaseManager`** – interface used by the rest of the app (`getConnection()`, `testConnection()`, `close()`).
+- **`DatabaseManagerOracle`** / **`DatabaseManagerSQLite`** – concrete implementations.
+- **`DatabaseManagerFactory.create()`** – picks the implementation from `DB_TYPE` (Oracle vs SQLite).
+
+Callers depend only on the interface. `getConnection()` returns a `Connection` that must be closed (prefer try-with-resources). `testConnection()` runs at startup. The interface extends `AutoCloseable` so the Oracle pool is destroyed cleanly on shutdown.
 
 Schema and seed data live in `src/main/resources/db/`.
 
@@ -108,7 +112,7 @@ Implement `ISlashCommandController` (which extends JDA’s `EventListener`):
 3. Guard on the command name so multiple listeners don’t fight each other.
 4. Fetch any needed data (DB, Git, etc.), build an embed via the View, and reply.
 
-Controllers receive their dependencies (View, DatabaseManager, GitManager, …) via constructor injection.
+Controllers receive their dependencies (View, IDatabaseManager, GitManager, …) via constructor injection.
 
 #### Event loops / moderation
 
