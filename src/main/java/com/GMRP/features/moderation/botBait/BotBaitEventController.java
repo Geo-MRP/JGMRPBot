@@ -1,8 +1,8 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
 package com.GMRP.features.moderation.botBait;
 
-import com.GMRP.core.databaseManager.DatabaseManager;
-import com.GMRP.features.LoopController;
+import com.GMRP.core.databaseManager.IDatabaseManager;
+import com.GMRP.features.ILoopController;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -15,11 +15,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
 
-public class BotBaitEventController extends ListenerAdapter implements LoopController {
+public class BotBaitEventController extends ListenerAdapter implements ILoopController {
 	BotBaitView view;
-	DatabaseManager databaseManager;
+	IDatabaseManager databaseManager;
 
-	public BotBaitEventController(BotBaitView view, DatabaseManager databaseManager) {
+	public BotBaitEventController(BotBaitView view, IDatabaseManager databaseManager) {
 		this.view = view;
 		this.databaseManager = databaseManager;
 	}

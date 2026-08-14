@@ -1,7 +1,7 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
 package com.GMRP.features.helpCommand;
 
-import com.GMRP.features.SlashCommandController;
+import com.GMRP.features.ISlashCommandController;
 
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -9,8 +9,8 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 
-public class HelpCommandController extends ListenerAdapter implements SlashCommandController {
-	private HelpEmbedView view;
+public class HelpCommandController extends ListenerAdapter implements ISlashCommandController {
+	private final HelpEmbedView view;
 
 	public HelpCommandController(HelpEmbedView view) {
 		this.view = view;
