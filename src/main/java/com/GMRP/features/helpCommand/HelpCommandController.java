@@ -1,4 +1,5 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
+
 package com.GMRP.features.helpCommand;
 
 import com.GMRP.features.ISlashCommandController;
