@@ -12,57 +12,54 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.mockito.Mockito.mockConstruction;
 import com.GMRP.BotConfig;
 public class DatabaseManagerFactoryTest {
-    @Test
-    void create_shouldReturnSQLiteManagerForSQLiteConfig() throws Exception {
-        BotConfig config = mock(BotConfig.class);
+	@Test
+	void create_shouldReturnSQLiteManagerForSQLiteConfig() throws Exception {
+		BotConfig config = mock(BotConfig.class);
 
-        when(config.getDbType()).thenReturn("sqlite");
+		when(config.getDbType()).thenReturn("sqlite");
 
-        try (MockedStatic<BotConfig> botConfig =
-                     mockStatic(BotConfig.class)) {
+		try (MockedStatic<BotConfig> botConfig = mockStatic(BotConfig.class)) {
 
-            botConfig.when(BotConfig::getInstance)
-                    .thenReturn(config);
+			botConfig.when(BotConfig::getInstance)
+					.thenReturn(config);
 
-            IDatabaseManager manager = DatabaseManagerFactory.create();
+			IDatabaseManager manager = DatabaseManagerFactory.create();
 
-            assertInstanceOf(DatabaseManagerSQLite.class, manager);
-        }
-    }
-    @Test
-    void create_shouldReturnSQLiteManagerForUnknownDatabaseType() throws Exception {
-        BotConfig config = mock(BotConfig.class);
+			assertInstanceOf(DatabaseManagerSQLite.class, manager);
+		}
+	}
+	@Test
+	void create_shouldReturnSQLiteManagerForUnknownDatabaseType() throws Exception {
+		BotConfig config = mock(BotConfig.class);
 
-        when(config.getDbType()).thenReturn("unknown");
+		when(config.getDbType()).thenReturn("unknown");
 
-        try (MockedStatic<BotConfig> botConfig =
-                     mockStatic(BotConfig.class)) {
+		try (MockedStatic<BotConfig> botConfig = mockStatic(BotConfig.class)) {
 
-            botConfig.when(BotConfig::getInstance)
-                    .thenReturn(config);
+			botConfig.when(BotConfig::getInstance)
+					.thenReturn(config);
 
-            IDatabaseManager manager = DatabaseManagerFactory.create();
+			IDatabaseManager manager = DatabaseManagerFactory.create();
 
-            assertInstanceOf(DatabaseManagerSQLite.class, manager);
-        }
-    }
-    @Test
-    void create_shouldReturnOracleManagerForOracleConfig() throws Exception {
-        BotConfig config = mock(BotConfig.class);
+			assertInstanceOf(DatabaseManagerSQLite.class, manager);
+		}
+	}
+	@Test
+	void create_shouldReturnOracleManagerForOracleConfig() throws Exception {
+		BotConfig config = mock(BotConfig.class);
 
-        when(config.getDbType()).thenReturn("oracle");
+		when(config.getDbType()).thenReturn("oracle");
 
-        try (MockedStatic<BotConfig> botConfig =
-                     mockStatic(BotConfig.class);
-             MockedConstruction<DatabaseManagerOracle> oracleConstruction =
-                     mockConstruction(DatabaseManagerOracle.class)) {
+		try (MockedStatic<BotConfig> botConfig = mockStatic(BotConfig.class);
+				MockedConstruction<DatabaseManagerOracle> oracleConstruction = mockConstruction(
+						DatabaseManagerOracle.class)) {
 
-            botConfig.when(BotConfig::getInstance)
-                    .thenReturn(config);
+			botConfig.when(BotConfig::getInstance)
+					.thenReturn(config);
 
-            IDatabaseManager manager = DatabaseManagerFactory.create();
+			IDatabaseManager manager = DatabaseManagerFactory.create();
 
-            assertInstanceOf(DatabaseManagerOracle.class, manager);
-        }
-    }
+			assertInstanceOf(DatabaseManagerOracle.class, manager);
+		}
+	}
 }
