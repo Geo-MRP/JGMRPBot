@@ -1,14 +1,12 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
 package com.GMRP.core.databaseManager;
-
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.when;
-
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedConstruction;
 import org.mockito.MockedStatic;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.mockito.Mockito.mockConstruction;
 import com.GMRP.BotConfig;
 public class DatabaseManagerFactoryTest {

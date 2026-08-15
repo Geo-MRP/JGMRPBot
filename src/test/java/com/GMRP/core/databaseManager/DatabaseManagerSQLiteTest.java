@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
 package com.GMRP.core.databaseManager;
 import static org.junit.jupiter.api.Assertions.*;
 import java.sql.Connection;

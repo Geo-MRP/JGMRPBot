@@ -1,5 +1,5 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
 package com.GMRP.core.databaseManager;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
