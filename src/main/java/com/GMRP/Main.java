@@ -81,7 +81,6 @@ public class Main {
 
 			// Push the list of command setups to the guild
 			guild.updateCommands().addCommands(commandSetups).queue();
-			Runtime.getRuntime().addShutdownHook(new Thread(databaseManager::close));
 		} catch (IOException | InterruptedException | DatabaseManagerException e) {
 			e.printStackTrace();
 		}
