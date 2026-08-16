@@ -31,6 +31,7 @@ JGMRPBot uses Maven to make setup incredibly simple and straightforward.
 5. Format your code by running `mvn spotless:apply`. This will automatically enforce our 4-space tab indentation and organize imports.
 6. Run the test suite and the Checkstyle linter by running `mvn clean install`. If Checkstyle lists any structural or naming convention errors, you must fix them before committing.
 7. If the build succeeds, commit your changes to your branch and create a pull request. Make sure to reference your issue from the pull request comments by including the issue number (e.g., "Fixes #123").
+
 ## About Pull Requests
 Pull requests must be made to the `develop` branch. This is due to the fact that the `main` branch is used for releases, and the `develop` branch is used for development.
 
@@ -45,9 +46,34 @@ When submitting an AI-assisted PR:
 * Mention that the code is AI-generated in the pull request description.
 * Clearly explain **what the change does, why it is needed**, and **what problem it solves**, using your own words.
 * Describe **how you verified the change**, including the test cases used.
-* Avoid excessive product-level logging. Use logging only when it provides meaningful diagnostic value.
+* **Ensure all logging follows the guidelines below** – AI-generated logs are often excessive or use the wrong log level. Review and adjust them before submitting.
 * Comments should document design decisions or implementation details in your own words. Avoid generic AI-generated comments that merely restate what the code already does.
 * Be prepared to answer review questions about the implementation. "The AI generated it" is not considered a sufficient explanation.
 * Large AI-generated changes without a clear understanding of the implementation are unlikely to be accepted.
 * If the implementation cannot be reasonably explained during code review, the pull request may be rejected regardless of whether it works.
-The quality, correctness, maintainability, and long-term ownership of the submitted code remain the responsibility of the contributor.
+  The quality, correctness, maintainability, and long-term ownership of the submitted code remain the responsibility of the contributor.
+
+## Logging Guidelines
+
+JGMRPBot uses **SLF4J with Logback** for structured, production-ready logging. All code contributions must follow these logging practices:
+
+### Core Principles
+
+- **Never use** `System.out.println()`, `System.err.println()`, or `e.printStackTrace()` in production code. All logging must go through the SLF4J `Logger`.
+- **Use the appropriate log level** for every message:
+  - `TRACE` – Extremely detailed debugging, typically disabled in production
+  - `DEBUG` – Useful development information, enabled during local testing
+  - `INFO` – Important lifecycle events (bot startup, command execution, successful operations)
+  - `WARN` – Recoverable issues that don't stop the bot (missing config values, permission failures)
+  - `ERROR` – Critical problems that need investigation (database connection failures, exceptions that disrupt functionality)
+- **Include relevant context** using MDC (Mapped Diagnostic Context) when handling Discord events:
+  - Add `userId`, `guildId`, `channelId`, and the `command` or `event` name
+  - **Always clear MDC** in a `finally` block to prevent context from leaking to other log entries
+- **Avoid excessive logging** in performance-critical code paths or tight loops. Log only what provides meaningful diagnostic value.
+
+### Configuration
+
+Logging behavior can be controlled at runtime:
+- **Log level**: Set the `LOG_LEVEL` environment variable (e.g., `export LOG_LEVEL=DEBUG`) or JVM property (e.g., `-Dlog.level=DEBUG`). Defaults to `INFO`.
+- **Log output**: The bot writes to both the console (for local development) and rotating log files in the `logs/` directory (20MB per file, 14 days retention).
+- **Structured output**: An optional JSON appender is available for log aggregation services (commented out in `logback.xml`; enable by adding the `logstash-logback-encoder` dependency).
