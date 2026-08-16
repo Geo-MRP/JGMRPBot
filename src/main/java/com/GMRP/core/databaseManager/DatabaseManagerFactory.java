@@ -2,16 +2,15 @@
 
 package com.GMRP.core.databaseManager;
 
-import java.sql.SQLException;
-
 import com.GMRP.BotConfig;
+import com.GMRP.core.databaseManager.exception.DatabaseManagerException;
 
 public final class DatabaseManagerFactory {
 
 	private DatabaseManagerFactory() {
 	}
 
-	public static IDatabaseManager create() throws SQLException {
+	public static IDatabaseManager create() throws DatabaseManagerException {
 		String dbType = BotConfig.getInstance().getDbType().toLowerCase();
 		if ("oracle".equals(dbType)) {
 			return new DatabaseManagerOracle();

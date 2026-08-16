@@ -1,22 +1,24 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
+
 package com.GMRP.core.databaseManager;
-import static org.junit.jupiter.api.Assertions.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.nio.file.Path;
 import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.DriverManager;
+
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+
+import com.GMRP.core.databaseManager.exception.DatabaseManagerException;
 
 public class DatabaseManagerSQLiteTest {
-	@Test
-	void getConnection_shouldReturnValidConnection() throws SQLException {
-		DatabaseManagerSQLite manager = new DatabaseManagerSQLite(":memory:");
+	@TempDir
+	Path temporaryDirectory;
 
-		try (Connection connection = manager.getConnection()) {
-			assertNotNull(connection);
-			assertFalse(connection.isClosed());
-		}
-	}
 	@Test
 	void testConnection_shouldReturnTrueForValidDatabase() {
 		DatabaseManagerSQLite manager = new DatabaseManagerSQLite(":memory:");
@@ -24,26 +26,31 @@ public class DatabaseManagerSQLiteTest {
 		assertTrue(manager.testConnection());
 	}
 	@Test
-	void getConnection_shouldAllowSqlExecution() throws SQLException {
-		DatabaseManagerSQLite manager = new DatabaseManagerSQLite(":memory:");
-
-		try (Connection connection = manager.getConnection();
-				Statement statement = connection.createStatement();
-				ResultSet resultSet = statement.executeQuery("SELECT 1")) {
-
-			assertTrue(resultSet.next());
-			assertEquals(1, resultSet.getInt(1));
+	void getConfigKey_shouldReturnConfiguredValue() throws Exception {
+		Path databasePath = temporaryDirectory.resolve("config.db");
+		try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + databasePath);
+				var statement = connection.createStatement()) {
+			statement.executeUpdate("CREATE TABLE CONFIG (CONFIG_KEY TEXT, CONFIG_VALUE TEXT)");
+			statement.executeUpdate("INSERT INTO CONFIG VALUES ('OWNER', '12345')");
 		}
-	}
-	@Test
-	void testConnection_shouldReturnFalseWhenConnectionFails() {
-		DatabaseManagerSQLite manager = new DatabaseManagerSQLite(":memory:") {
-			@Override
-			public Connection getConnection() throws SQLException {
-				throw new SQLException("Database connection failed");
-			}
-		};
 
-		assertFalse(manager.testConnection());
+		DatabaseManagerSQLite manager = new DatabaseManagerSQLite(databasePath.toString());
+
+		assertEquals("12345", manager.getConfigKey("OWNER"));
+	}
+
+	@Test
+	void getConfigKey_shouldThrowDatabaseManagerExceptionWhenKeyIsMissing() throws Exception {
+		Path databasePath = temporaryDirectory.resolve("config.db");
+		try (Connection connection = DriverManager.getConnection("jdbc:sqlite:" + databasePath);
+				var statement = connection.createStatement()) {
+			statement.executeUpdate("CREATE TABLE CONFIG (CONFIG_KEY TEXT, CONFIG_VALUE TEXT)");
+		}
+
+		DatabaseManagerSQLite manager = new DatabaseManagerSQLite(databasePath.toString());
+
+		DatabaseManagerException exception = assertThrows(DatabaseManagerException.class,
+				() -> manager.getConfigKey("MISSING"));
+		assertEquals("Failed to get config value from database", exception.getMessage());
 	}
 }

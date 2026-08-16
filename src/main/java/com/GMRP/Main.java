@@ -3,14 +3,11 @@
 package com.GMRP;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.*;
 
 import com.GMRP.core.databaseManager.DatabaseManagerFactory;
 import com.GMRP.core.databaseManager.IDatabaseManager;
+import com.GMRP.core.databaseManager.exception.DatabaseManagerException;
 import com.GMRP.core.gitManager.GitManager;
 import com.GMRP.features.ILoopController;
 import com.GMRP.features.ISlashCommandController;
@@ -32,9 +29,8 @@ public class Main {
 		// Initialize Models
 		// GMRP Repo
 		BotConfig.init();
-		try {
+		try (IDatabaseManager databaseManager = DatabaseManagerFactory.create();) {
 			GitManager repositoryManager = new GitManager(".");
-			IDatabaseManager databaseManager = DatabaseManagerFactory.create();
 			databaseManager.testConnection();
 
 			// Slash Commands
@@ -77,24 +73,17 @@ public class Main {
 
 			// Guild to save the commands to
 			Guild guild;
-			try (Connection connection = databaseManager.getConnection();
-					PreparedStatement preparedStatement = connection
-							.prepareStatement("SELECT CONFIG_VALUE FROM CONFIG WHERE CONFIG_KEY = ?")) {
-				preparedStatement.setString(1, "SERVER");
-				try (ResultSet resultSet = preparedStatement.executeQuery()) {
-					if (!resultSet.next())
-						throw new RuntimeException("Guild ID not found in the database.");
-					guild = jda.getGuildById(resultSet.getString(1));
-				}
+			try {
+				guild = jda.getGuildById(databaseManager.getConfigKey("SERVER"));
+			} catch (DatabaseManagerException e) {
+				throw new RuntimeException("Guild ID not found in the database.");
 			}
 
 			// Push the list of command setups to the guild
 			guild.updateCommands().addCommands(commandSetups).queue();
 			Runtime.getRuntime().addShutdownHook(new Thread(databaseManager::close));
-		} catch (IOException | InterruptedException e) {
+		} catch (IOException | InterruptedException | DatabaseManagerException e) {
 			e.printStackTrace();
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
 		}
 	}
 }

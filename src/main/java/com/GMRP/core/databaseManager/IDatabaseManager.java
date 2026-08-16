@@ -2,19 +2,13 @@
 
 package com.GMRP.core.databaseManager;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import com.GMRP.core.databaseManager.exception.DatabaseManagerException;
 
 /**
  * Database access point. Implementations exist for Oracle (UCP) and SQLite.
  * Designed for constructor-based dependency injection.
  */
 public interface IDatabaseManager extends AutoCloseable {
-
-	/**
-	 * Returns a Connection. Always close it (preferably with try-with-resources).
-	 */
-	Connection getConnection() throws SQLException;
 
 	/**
 	 * Simple connectivity check. Useful at startup or in tests.
@@ -26,4 +20,9 @@ public interface IDatabaseManager extends AutoCloseable {
 	 */
 	@Override
 	void close();
+
+	/**
+	 * Get the value of a specific configuration key
+	 */
+	String getConfigKey(String key) throws DatabaseManagerException;
 }
