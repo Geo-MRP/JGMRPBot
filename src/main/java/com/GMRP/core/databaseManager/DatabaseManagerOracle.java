@@ -56,12 +56,10 @@ public class DatabaseManagerOracle implements IDatabaseManager {
 			if (resultSet.next()) {
 				int result = resultSet.getInt(1);
 				LOGGER.info("Database connection OK (Oracle). Test result: {}", result);
-				System.out.println("Database connection OK (Oracle). Test result: " + result);
 				return true;
 			}
 		} catch (DatabaseManagerException | SQLException e) {
 			LOGGER.error("Database connection FAILED (Oracle): {}", e.getMessage(), e);
-			System.err.println("Database connection FAILED (Oracle): " + e.getMessage());
 		}
 		return false;
 	}
