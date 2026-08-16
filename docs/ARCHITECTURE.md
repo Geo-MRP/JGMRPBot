@@ -21,7 +21,7 @@ The bot currently supports two kinds of feature modules:
 | Type | Interface | Purpose | Example |
 |------|-----------|---------|---------|
 | Slash Commands | `ISlashCommandController` | User-invoked `/commands` | `/about`, `/help` |
-| Event Loops | `ILoopController` | React to ongoing Discord events | Bot-bait moderation |
+| Event Loops | `IEventListenerController` | React to ongoing Discord events | Bot-bait moderation |
 
 ## Package structure
 ```
@@ -116,7 +116,7 @@ Controllers receive their dependencies (View, IDatabaseManager, GitManager, …)
 
 #### Event loops / moderation
 
-Implement `ILoopController` (also an `EventListener`).  
+Implement `IEventListenerController` (also an `EventListener`).  
 These react to continuous events such as `MessageReceivedEvent`. The Bot-bait module is the current example: it watches a configured channel and bans accounts that post there (typical self-bot bait).
 
 ### Views & embeds
@@ -140,7 +140,7 @@ These react to continuous events such as `MessageReceivedEvent`. The Bot-bait mo
 ## Adding a new event-driven feature
 
 1. Create a package under the appropriate category (e.g. `features/moderation/...`).
-2. Implement `ILoopController`.
+2. Implement `IEventListenerController`.
 3. Register the controller in the `loops` list inside `Main`.
 4. Follow the same testing and formatting rules as above.
 

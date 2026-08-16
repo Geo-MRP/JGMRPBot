@@ -12,8 +12,14 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 public class AboutCommandController extends ListenerAdapter implements ISlashCommandController {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(AboutCommandController.class);
+
 	private final AboutEmbedView view;
 	private final GitManager gitManager;
 	private final IDatabaseManager databaseManager;
@@ -39,18 +45,30 @@ public class AboutCommandController extends ListenerAdapter implements ISlashCom
 		if (!event.getFullCommandName().equalsIgnoreCase("about"))
 			return;
 
-		String ownerId;
+		MDC.put("command", "about");
+		MDC.put("userId", event.getUser().getId());
+		MDC.put("guildId", event.getGuild() != null ? event.getGuild().getId() : "DM");
+		MDC.put("channelId", event.getChannel().getId());
 
 		try {
-			ownerId = databaseManager.getConfigKey("OWNER");
-		} catch (DatabaseManagerException e) {
-			event.reply("Owner ID not found in the database.").setEphemeral(true).queue();
-			return;
+			LOGGER.debug("Executing /about command");
+
+			String ownerId;
+			try {
+				ownerId = databaseManager.getConfigKey("OWNER");
+			} catch (DatabaseManagerException e) {
+				LOGGER.error("Failed to retrieve OWNER config key", e);
+				event.reply("Owner ID not found in the database.").setEphemeral(true).queue();
+				return;
+			}
+			String ownerMention = "<@" + ownerId + ">";
+			String currentBranch = gitManager.getCurrentBranch();
+			String version = VersionReader.getVersion();
+			MessageEmbed aboutEmbed = view.formatAboutEmbed(ownerMention, currentBranch, version);
+			event.replyEmbeds(aboutEmbed).queue();
+			LOGGER.debug("Successfully replied to /about command");
+		} finally {
+			MDC.clear();
 		}
-		String ownerMention = "<@" + ownerId + ">";
-		String currentBranch = gitManager.getCurrentBranch();
-		String version = VersionReader.getVersion();
-		MessageEmbed aboutEmbed = view.formatAboutEmbed(ownerMention, currentBranch, version);
-		event.replyEmbeds(aboutEmbed).queue();
 	}
 }
