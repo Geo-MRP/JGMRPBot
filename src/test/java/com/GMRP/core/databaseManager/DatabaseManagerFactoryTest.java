@@ -1,17 +1,22 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
+
 package com.GMRP.core.databaseManager;
+
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.when;
+
+import com.GMRP.core.databaseManager.exception.DatabaseManagerException;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedConstruction;
 import org.mockito.MockedStatic;
 import static org.mockito.Mockito.mockConstruction;
 import com.GMRP.BotConfig;
+
 public class DatabaseManagerFactoryTest {
 	@Test
-	void create_shouldReturnSQLiteManagerForSQLiteConfig() throws Exception {
+	void create_shouldReturnSQLiteManagerForSQLiteConfig() throws DatabaseManagerException {
 		BotConfig config = mock(BotConfig.class);
 
 		when(config.getDbType()).thenReturn("sqlite");
@@ -27,7 +32,7 @@ public class DatabaseManagerFactoryTest {
 		}
 	}
 	@Test
-	void create_shouldReturnSQLiteManagerForUnknownDatabaseType() throws Exception {
+	void create_shouldReturnSQLiteManagerForUnknownDatabaseType() throws DatabaseManagerException {
 		BotConfig config = mock(BotConfig.class);
 
 		when(config.getDbType()).thenReturn("unknown");
@@ -43,7 +48,7 @@ public class DatabaseManagerFactoryTest {
 		}
 	}
 	@Test
-	void create_shouldReturnOracleManagerForOracleConfig() throws Exception {
+	void create_shouldReturnOracleManagerForOracleConfig() throws DatabaseManagerException {
 		BotConfig config = mock(BotConfig.class);
 
 		when(config.getDbType()).thenReturn("oracle");
