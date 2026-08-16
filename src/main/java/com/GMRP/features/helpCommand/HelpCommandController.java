@@ -32,7 +32,7 @@ public class HelpCommandController extends ListenerAdapter implements ISlashComm
 		if (!event.getFullCommandName().equalsIgnoreCase("help"))
 			return;
 
-		MDC.put("command", "about");
+		MDC.put("command", "help");
 		MDC.put("userId", event.getUser().getId());
 		MDC.put("guildId", event.getGuild() != null ? event.getGuild().getId() : "DM");
 		MDC.put("channelId", event.getChannel().getId());
