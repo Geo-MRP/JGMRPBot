@@ -9,70 +9,66 @@ This document describes how JGMRPBot is structured so contributors can orient th
 
 ## High-level overview
 
-JGMRPBot is a **JDA-based Discord bot** written in Java. It follows a lightweight **Model / Controller / View** separation:
+JGMRPBot is a **JDA-based Discord bot** written in Java. It follows a lightweight **Model / View / Controller** separation:
 
-- **Controllers** handle Discord events (slash commands, messages, etc.) and coordinate data access.
-- **Views** format Discord embeds and messages.
 - **Core** components (Models) provide shared infrastructure (config, database, Git info).
-- **Main** wires everything together at startup.
+- **Views** format Discord embeds and messages.
+- **Controllers** handle Discord events (slash commands, messages, etc.) and coordinate data access.
+- **Main** sets up all the MVCs at startup.
 
 The bot currently supports two kinds of feature modules:
 
-| Type | Interface | Purpose | Example |
-|------|-----------|---------|---------|
-| Slash Commands | `ISlashCommandController` | User-invoked `/commands` | `/about`, `/help` |
-| Event Loops | `IEventListenerController` | React to ongoing Discord events | Bot-bait moderation |
+| Type            | Interface | Purpose                   | Example           |
+|-----------------|-----------|---------------------------|-------------------|
+| Slash Commands  | `ISlashCommandController` | User-invoked `/commands`  | `/about`, `/help` |
+| Event Listeners | `IEventListenerController` | Listen for Discord events | Bot-bait honeypot |
 
 ## Package structure
 ```
 com.GMRP
-├── Main.java                 # Entry point – wires config, DB, commands, and listeners
-├── BotConfig.java            # Singleton that reads environment variables
-│
-├── core/
-│   ├── databaseManager/
-│   │   └── IDatabaseManager.java       # Database Management Interface
-│   │   └── DatabaseManagerOracle.java  # Oracle Database Implementation
-│   │   └── DatabaseManagerSQLite.java  # SQLite Database Implementation
-│   │   └── DatabaseManagerFactory.java # Database Manager Factory
-│   └── gitManager/
-│       └── GitManager.java        # Reads current Git branch (used by /about)
-│
-├── features/
-│   ├── SlashCommandController.java   # Interface for slash-command modules
-│   ├── LoopController.java           # Interface for event-driven modules
-│   │
-│   ├── aboutCommand/
-│   │   ├── AboutCommandController.java
-│   │   ├── AboutEmbedView.java
-│   │   └── VersionReader.java
-│   │
-│   ├── helpCommand/
-│   │   ├── HelpCommandController.java
-│   │   └── HelpEmbedView.java
-│   │
-│   └── moderation/
-│       └── botBait/
-│           ├── BotBaitEventController.java
-│           └── BotBaitView.java
-│
-└── views/
-└── shared/
-└── BotEmbedBuilder.java      # Shared embed styling (footer, color, etc.)
+├── Main.java                               # Sets up the MVCs
+├── BotConfig.java                          # Singleton that reads ENV vars
+├── core/                                   # Model
+│   ├── databaseManager/                        # Database Core
+│   │   ├── IDatabaseManager.java                   # Database Management Interface
+│   │   ├── DatabaseManagerFactory.java             # Database Manager Factory
+│   │   ├── DatabaseManagerOracle.java              # Oracle Database Implementation
+│   │   ├── DatabaseManagerSQLite.java              # SQLite Database Implementation
+│   │   └── exception/                              # Database exceptions
+│   │       └── DatabaseManagerException.java       # Base exception
+│   └── gitManager/                             # Git Core
+│       └── GitManager.java                         # Git Management
+├── features/                               # View + Controller
+│   ├── IEventListenerController.java           # Interface for event listeners
+│   ├── ISlashCommandController.java            # Interface for Slash Commands
+│   ├── aboutCommand/                           # Bot Info Slash Command
+│   │   ├── AboutCommandController.java             # Controller
+│   │   ├── AboutEmbedView.java                     # View
+│   │   └── VersionReader.java                      # Utility
+│   ├── helpCommand/                            # Help Slash Command
+│   │   ├── HelpCommandController.java              # Controller
+│   │   └── HelpEmbedView.java                      # View
+│   └── moderation/                             # Moderation Feature Group
+│       └── botBait/                                # Bot Bait Honeypot Event Listener
+│           ├── BotBaitEventController.java             # Controller
+│           └── BotBaitView.java                        # View
+└── views/                                  # Views
+    └── shared/                                 # Shared Views
+        └── BotEmbedBuilder.java                    # Shared Embed Styling
 ```
 
 ## Startup flow (`Main`)
 
 1. `BotConfig.init()` – loads environment variables (token, DB settings, etc.).
-2. Create shared services:
+2. Create Core Models:
     - `GitManager` (repository info)
     - `IDatabaseManager` (connection pool / SQLite)
-3. Instantiate feature modules (controllers + their views).
+        - With a shutdown hook to close the pool.
+3. Instantiate feature modules (controllers + views).
 4. Register every controller as a JDA event listener.
 5. Build the JDA instance and wait until it is ready.
 6. Set the bot avatar URL on `BotEmbedBuilder` (used for consistent footers).
 7. Collect all `SlashCommandData` from the command controllers and register them on the target guild (guild ID comes from the database).
-8. Register a shutdown hook that closes the database connection pool.
 
 ## Key components
 
@@ -93,11 +89,11 @@ Most runtime values that used to live in environment variables (owner ID, server
 
 Provides a single entry point for database access:
 
-- **`IDatabaseManager`** – interface used by the rest of the app (`getConnection()`, `testConnection()`, `close()`).
-- **`DatabaseManagerOracle`** / **`DatabaseManagerSQLite`** – concrete implementations.
+- **`IDatabaseManager`** – interface used by the rest of the app (`getConfigKey()`, `testConnection()`, `close()`).
+- **`DatabaseManagerOracle`** / **`DatabaseManagerSQLite`** – concrete DB implementations.
 - **`DatabaseManagerFactory.create()`** – picks the implementation from `DB_TYPE` (Oracle vs SQLite).
 
-Callers depend only on the interface. `getConnection()` returns a `Connection` that must be closed (prefer try-with-resources). `testConnection()` runs at startup. The interface extends `AutoCloseable` so the Oracle pool is destroyed cleanly on shutdown.
+Callers depend only on the interface. That means that new interface methods must be added to the interface and implemented by the concrete implementations.
 
 Schema and seed data live in `src/main/resources/db/`.
 
@@ -110,7 +106,7 @@ Implement `ISlashCommandController` (which extends JDA’s `EventListener`):
 1. Provide `getCommandSetup()` – returns the `SlashCommandData` (name, description, options).
 2. Override the appropriate JDA event method (usually `onSlashCommandInteraction`).
 3. Guard on the command name so multiple listeners don’t fight each other.
-4. Fetch any needed data (DB, Git, etc.), build an embed via the View, and reply.
+4. Fetch any necessary data (DB, Git, etc.), build an embed via the View, and reply.
 
 Controllers receive their dependencies (View, IDatabaseManager, GitManager, …) via constructor injection.
 
@@ -122,14 +118,14 @@ These react to continuous events such as `MessageReceivedEvent`. The Bot-bait mo
 ### Views & embeds
 
 - Feature-specific views (e.g. `AboutEmbedView`) know how to format the data for that command.
-- `BotEmbedBuilder` supplies the common styling (blue color, “Made by Denver” footer with the bot avatar).
+- `BotEmbedBuilder` supplies the common styling (color, attribution footer with the bot avatar).
 - Prefer creating embeds through the views rather than building them ad-hoc inside controllers.
 
 ## Adding a new slash command
 
 1. Create a new package under `features/` (e.g. `features/pingCommand/`).
-2. Add a `*CommandController` that implements `ISlashCommandController` and extends `ListenerAdapter`.
-3. Add a corresponding `*EmbedView` (or reuse `BotEmbedBuilder` directly for very simple replies).
+2. Add a `CommandController` that implements `ISlashCommandController` and extends `ListenerAdapter`.
+3. Add a corresponding `EmbedView` (or reuse `BotEmbedBuilder` directly for very simple replies).
 4. In `Main`:
     - Instantiate the view and controller.
     - Add the controller to the `slashCommands` list.
@@ -141,7 +137,7 @@ These react to continuous events such as `MessageReceivedEvent`. The Bot-bait mo
 
 1. Create a package under the appropriate category (e.g. `features/moderation/...`).
 2. Implement `IEventListenerController`.
-3. Register the controller in the `loops` list inside `Main`.
+3. Register the controller in the `eventListeners` list inside `Main`.
 4. Follow the same testing and formatting rules as above.
 
 ## Design principles currently in use

@@ -18,10 +18,11 @@ public class AboutEmbedViewTest {
 		MessageEmbed embed = view.formatAboutEmbed("A", "B", "C");
 		// assert
 		assertAll(
-				() -> assertEquals(embed.getTitle(), "About GMRP"),
-				() -> assertEquals(embed.getDescription(),
-						"# GeoFS Military Roleplay Bot\n\nOwned by A\n\n[Dashboard](https://bot.geo-mrp.com/)\nBranch: `B`\nVersion: `C`"),
-				() -> assertEquals(embed.getFooter().getText(), "Made by Denver"),
+				() -> assertEquals("About GMRP", embed.getTitle()),
+				() -> assertEquals(
+						"# GeoFS Military Roleplay Bot\n\nOwned by A\n\n[Dashboard](https://bot.geo-mrp.com/)\nBranch: `B`\nVersion: `C`",
+						embed.getDescription()),
+				() -> assertEquals("Made by Denver", embed.getFooter().getText()),
 				() -> assertEquals(embed.getColor(), java.awt.Color.BLUE));
 	}
 }

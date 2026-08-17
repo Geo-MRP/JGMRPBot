@@ -45,10 +45,10 @@ public class Main {
 	}
 
 	private void start(String[] args) {
+		BotConfig.init();
 		initGitManager();
 
 		LOGGER.info("Starting JGMRPBot v{} (branch: {})", version, gitManager.getCurrentBranch());
-		BotConfig.init();
 
 		initDatabaseManager();
 
