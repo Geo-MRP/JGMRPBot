@@ -49,12 +49,10 @@ public class DatabaseManagerSQLite implements IDatabaseManager {
 			if (rs.next()) {
 				int result = rs.getInt(1);
 				LOGGER.info("Database connection OK (SQLite). Test result: {}", result);
-				System.out.println("Database connection OK (SQLite). Test result: " + result);
 				return true;
 			}
 		} catch (DatabaseManagerException | SQLException e) {
 			LOGGER.error("Database connection FAILED (SQLite): {}", e.getMessage(), e);
-			System.err.println("Database connection FAILED (SQLite): " + e.getMessage());
 		}
 		return false;
 	}

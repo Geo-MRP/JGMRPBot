@@ -50,7 +50,8 @@ When submitting an AI-assisted PR:
 * Comments should document design decisions or implementation details in your own words. Avoid generic AI-generated comments that merely restate what the code already does.
 * Be prepared to answer review questions about the implementation. "The AI generated it" is not considered a sufficient explanation.
 * Large AI-generated changes without a clear understanding of the implementation are unlikely to be accepted.
-* If the implementation cannot be reasonably explained during code review, the pull request may be rejected regardless of whether it works.
+
+If the implementation cannot be reasonably explained during code review, the pull request may be rejected regardless of whether it works.
   The quality, correctness, maintainability, and long-term ownership of the submitted code remain the responsibility of the contributor.
 
 ## Logging Guidelines

@@ -80,7 +80,6 @@ public class DatabaseManagerOracle implements IDatabaseManager {
 			}
 		} catch (Exception e) {
 			LOGGER.error("Error while destroying Oracle connection pool: {}", e.getMessage(), e);
-			System.err.println("Error while destroying Oracle connection pool: " + e.getMessage());
 		}
 	}
 

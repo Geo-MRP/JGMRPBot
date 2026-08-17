@@ -4,11 +4,15 @@ package com.GMRP.core.gitManager;
 
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 
 public class GitManager {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(GitManager.class);
 	private final Repository repository;
 
 	public GitManager(String path) throws IOException {
@@ -29,7 +33,7 @@ public class GitManager {
 		try {
 			return this.repository.getBranch();
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.error("Failed to get current branch", e);
 			return "Unknown Branch";
 		}
 	}
