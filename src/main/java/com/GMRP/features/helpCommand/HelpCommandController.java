@@ -39,7 +39,7 @@ public class HelpCommandController extends ListenerAdapter implements ISlashComm
 
 		LOGGER.info("Executing /help command");
 
-		event.getJDA().retrieveCommands().queue(commands -> {
+		event.getGuild().retrieveCommands().queue(commands -> {
 			MessageEmbed helpEmbed = view.formatHelpEmbed(commands);
 			event.replyEmbeds(helpEmbed).queue();
 		});
