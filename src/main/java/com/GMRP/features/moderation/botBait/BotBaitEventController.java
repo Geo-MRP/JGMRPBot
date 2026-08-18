@@ -64,7 +64,7 @@ public class BotBaitEventController extends ListenerAdapter implements IEventLis
 			}
 
 			if (event.getMember() == null || !event.getGuild().getSelfMember().canInteract(event.getMember())) {
-				LOGGER.error("Bot cannot bot the member. Deleting message.");
+				LOGGER.error("Bot cannot ban the member. Deleting message.");
 				event.getMessage().delete().queue();
 				sendEmbedIfNecessary(event);
 				return;
