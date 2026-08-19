@@ -6,7 +6,7 @@
 
     <groupId>com.GMRP</groupId>
     <artifactId>JGMRPBot</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.2</version>
 
     <properties>
         <maven.compiler.source>26</maven.compiler.source>
