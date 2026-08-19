@@ -15,22 +15,16 @@ jobs:
     steps:
       # Grab your repository's code
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
-      # Install Java 21
+      # Install Java 26
       - name: Set up JDK 26
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: '26'
           distribution: 'temurin'
           cache: maven # This caches your dependencies so builds are blazingly fast
 
-      # 3. THE EXECUTION: Run your strict rules
-
-      # Step A: Did they format their code?
-      - name: Check Formatting (Spotless)
-        run: mvn spotless:check
-
-      # Step B: Does the logic pass Checkstyle and do the tests work?
-      - name: Build, Lint, and Test
-        run: mvn clean install
+      # 3. THE EXECUTION: Validate, compile, lint, and test without packaging
+      - name: Lint and Test
+        run: mvn clean test

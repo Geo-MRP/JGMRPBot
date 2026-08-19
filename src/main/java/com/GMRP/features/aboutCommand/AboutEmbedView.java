@@ -1,4 +1,5 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
+
 package com.GMRP.features.aboutCommand;
 
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -11,10 +12,14 @@ public class AboutEmbedView {
 	public MessageEmbed formatAboutEmbed(String owner, String branchName, String version) {
 		EmbedBuilder embed = BotEmbedBuilder.create();
 
+		StringBuilder descriptionBuilder = new StringBuilder();
+		descriptionBuilder.append("# GeoFS Military Roleplay Bot\n\nOwned by ").append(owner)
+				.append("\n\n[Dashboard](https://bot.geo-mrp.com/)\nBranch: `").append(branchName)
+				.append("`\nVersion: `").append(version).append("`");
+		String description = descriptionBuilder.toString();
+
 		embed.setTitle("About GMRP");
-		embed.setDescription("# GeoFS Military Roleplay Bot\n\nOwned by " + owner
-				+ "\n\n[Dashboard](https://bot.geo-mrp.com/)\nBranch: `" + branchName + "`\nVersion: `" + version
-				+ "`");
+		embed.setDescription(description);
 
 		return embed.build();
 	}

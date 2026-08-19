@@ -1,16 +1,22 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
+
 package com.GMRP.features.helpCommand;
 
-import com.GMRP.features.SlashCommandController;
+import com.GMRP.features.ISlashCommandController;
 
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
-public class HelpCommandController extends ListenerAdapter implements SlashCommandController {
-	private HelpEmbedView view;
+public class HelpCommandController extends ListenerAdapter implements ISlashCommandController {
+	private static final Logger LOGGER = LoggerFactory.getLogger(HelpCommandController.class);
+
+	private final HelpEmbedView view;
 
 	public HelpCommandController(HelpEmbedView view) {
 		this.view = view;
@@ -23,12 +29,22 @@ public class HelpCommandController extends ListenerAdapter implements SlashComma
 
 	@Override
 	public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
-		if (event.getFullCommandName().equalsIgnoreCase("help")) {
-			event.getJDA().retrieveCommands().queue(commands -> {
-				MessageEmbed helpEmbed = view.formatHelpEmbed(commands);
-				event.replyEmbeds(helpEmbed).queue();
-			});
-		}
+		if (!event.getFullCommandName().equalsIgnoreCase("help"))
+			return;
+
+		MDC.put("command", "help");
+		MDC.put("userId", event.getUser().getId());
+		MDC.put("guildId", event.getGuild() != null ? event.getGuild().getId() : "DM");
+		MDC.put("channelId", event.getChannel().getId());
+
+		LOGGER.info("Executing /help command");
+
+		event.getGuild().retrieveCommands().queue(commands -> {
+			MessageEmbed helpEmbed = view.formatHelpEmbed(commands);
+			event.replyEmbeds(helpEmbed).queue();
+		});
+
+		MDC.clear();
 	}
 
 }

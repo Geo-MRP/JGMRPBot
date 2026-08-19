@@ -1,4 +1,5 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
+
 package com.GMRP.features.helpCommand;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class HelpEmbedView {
 		StringBuilder descBuilder = new StringBuilder();
 		descBuilder.append("**List of available commands:**\n");
 		for (Command command : commandList) {
-			descBuilder.append(command.getAsMention() + ": " + command.getDescription() + "\n");
+			descBuilder.append(command.getAsMention()).append(": ").append(command.getDescription()).append("\n");
 		}
 		String description = descBuilder.toString();
 

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!--
+      Log level can be overridden at runtime:
+        -Dlog.level=DEBUG
+        or export LOG_LEVEL=DEBUG
+      Default: INFO
+    -->
+    <property name="LOG_LEVEL" value="${LOG_LEVEL:-INFO}"/>
+    <property name="LOG_DIR" value="${LOG_DIR:-logs}"/>
+
+    <!-- Pattern that includes MDC context (guild, channel, user, command, event, …) -->
+    <property name="LOG_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} %X{command}%X{event} %X{guildId} %X{channelId} %X{userId} - %msg%n"/>
+
+    <!-- Pretty / slightly more readable console pattern for local development -->
+    <property name="CONSOLE_PATTERN"
+              value="%d{HH:mm:ss.SSS} %highlight(%-5level) [%thread] %cyan(%logger{36}) %magenta(%X{command}%X{event}) %X{guildId} %X{channelId} %X{userId} - %msg%n"/>
+
+    <!-- ========== Console (always on – useful for local + Docker / systemd) ========== -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- ========== Rolling file (production) ========== -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/output.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/jgmrpbot.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <maxFileSize>20MB</maxFileSize>
+            <maxHistory>14</maxHistory>
+            <totalSizeCap>500MB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!--
+      Optional JSON appender for later log aggregation (ELK, Loki, etc.).
+      Disabled by default. To enable, add the dependency:
+
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>8.0</version>
+        </dependency>
+
+      and uncomment the appender + the appender-ref below.
+    -->
+    <!--
+    <appender name="JSON" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_DIR}/jgmrpbot.json</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIR}/jgmrpbot.%d{yyyy-MM-dd}.%i.json.gz</fileNamePattern>
+            <maxFileSize>20MB</maxFileSize>
+            <maxHistory>14</maxHistory>
+            <totalSizeCap>500MB</totalSizeCap>
+        </rollingPolicy>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <includeMdcKeyName>command</includeMdcKeyName>
+            <includeMdcKeyName>event</includeMdcKeyName>
+            <includeMdcKeyName>guildId</includeMdcKeyName>
+            <includeMdcKeyName>channelId</includeMdcKeyName>
+            <includeMdcKeyName>userId</includeMdcKeyName>
+        </encoder>
+    </appender>
+    -->
+
+    <!-- Root logger -->
+    <root level="${LOG_LEVEL}">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+        <!-- <appender-ref ref="JSON"/> -->
+    </root>
+
+    <!-- Third-party noise control -->
+    <logger name="net.dv8tion.jda" level="INFO"/>
+    <logger name="org.eclipse.jgit" level="WARN"/>
+    <logger name="oracle.ucp" level="WARN"/>
+    <logger name="oracle.jdbc" level="WARN"/>
+</configuration>

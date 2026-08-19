@@ -1,4 +1,5 @@
 /* SPDX-License-Identifier: AGPL-3.0-or-later */
+
 package com.GMRP;
 
 import org.json.JSONObject;
@@ -47,10 +48,10 @@ public class BotConfig {
 		config = new JSONObject();
 		config.put("TOKEN", System.getenv("TOKEN"));
 		config.put("DB_TYPE", System.getenv("DB_TYPE")); // "oracle" or "sqlite"
+		config.put("DB_SQLITE_PATH", System.getenv("DB_SQLITE_PATH")); // e.g. "data/database.db"
 		config.put("DB_USER", System.getenv("DB_USER"));
 		config.put("DB_PASSWORD", System.getenv("DB_PASSWORD"));
 		config.put("DB_CONNECT_STRING", System.getenv("DB_CONNECT_STRING")); // Oracle only
-		config.put("DB_SQLITE_PATH", System.getenv("DB_SQLITE_PATH")); // e.g. "data/database.db"
 	}
 
 	public String getToken() {

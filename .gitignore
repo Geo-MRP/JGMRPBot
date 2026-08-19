@@ -2,8 +2,9 @@
 *.class
 /bin/
 
-# Log file
+# Log files
 *.log
+logs/
 
 # BlueJ files
 *.ctxt
