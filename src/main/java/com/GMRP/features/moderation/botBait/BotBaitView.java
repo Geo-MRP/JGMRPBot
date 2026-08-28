@@ -11,8 +11,8 @@ public class BotBaitView {
 		EmbedBuilder embed = BotEmbedBuilder.create();
 		embed.setTitle("DO NOT SEND MESSAGES HERE")
 				.setDescription(
-						"This channel is intended to bait bots or hacked accounts into sending messages here, which will then trigger me into automaticly banning them, deleting recent messages, and alerting cabinet")
-				.addField("What if I accidently do",
+						"This channel is intended to bait bots or hacked accounts into sending messages here, which will then trigger me into automatically banning them, deleting recent messages, and alerting cabinet")
+				.addField("What if I accidentally do",
 						"Contact a cabinet member and wait for them to check your message and unban you", true);
 		return embed.build();
 	}
