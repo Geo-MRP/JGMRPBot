@@ -18,6 +18,7 @@ import com.GMRP.features.aboutCommand.VersionReader;
 import com.GMRP.features.helpCommand.HelpEmbedView;
 import com.GMRP.features.ISlashCommandController;
 import com.GMRP.features.IEventListenerController;
+import com.GMRP.features.moderation.unverifiedCommand.UnverifiedCommandController;
 import com.GMRP.views.shared.BotEmbedBuilder;
 
 import net.dv8tion.jda.api.JDA;
@@ -122,6 +123,9 @@ public class Main {
 
 		HelpEmbedView helpEmbedView = new HelpEmbedView();
 		slashCommands.add(new HelpCommandController(helpEmbedView));
+
+		UnverifiedCommandController unverifiedCommandController = new UnverifiedCommandController(databaseManager);
+		slashCommands.add(unverifiedCommandController);
 
 		for (ISlashCommandController controller : slashCommands) {
 			builder.addEventListeners(controller); // Tell JDA to listen to them

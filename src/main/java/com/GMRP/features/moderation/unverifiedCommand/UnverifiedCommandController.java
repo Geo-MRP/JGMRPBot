@@ -18,7 +18,8 @@ import org.slf4j.MDC;
 
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class UnverifiedCommandController extends ListenerAdapter implements ISlashCommandController {
 
@@ -50,47 +51,52 @@ public class UnverifiedCommandController extends ListenerAdapter implements ISla
 		try {
 			LOGGER.debug("Executing /unverified command");
 
-			// TODO: defer reply
+			event.deferReply(true).queue();
 
 			String unverifiedRoleId;
-
 			try {
 				unverifiedRoleId = databaseManager.getConfigKey("UNVERIFIED");
 			} catch (DatabaseManagerException e) {
 				LOGGER.error("Failed to get unverified role ID", e);
-				event.reply("Unverified Role ID not found in the database").setEphemeral(true).queue();
+				event.getHook().sendMessage("Unverified Role ID not found in the database").queue();
 				return;
 			}
 
 			Role role = event.getGuild().getRoleById(unverifiedRoleId);
+			if (role == null) {
+				event.getHook().sendMessage("Unverified role not found in the guild").queue();
+				return;
+			}
+
+			OffsetDateTime cutoff = OffsetDateTime.now().minusMonths(6);
+
 			event.getGuild().findMembersWithRoles(role)
 					.onSuccess(list -> {
-						ArrayList<Member> filteredMembers = new ArrayList<>();
-						list.forEach(member -> {
-							if (member.hasTimeJoined()) {
-								if (!member.getTimeJoined().plusMonths(6).isAfter(OffsetDateTime.now())) {
-									filteredMembers.add(member);
-								}
-							}
-						});
+						List<Member> filteredMembers = list.stream()
+								.filter(Member::hasTimeJoined)
+								.filter(member -> member.getTimeJoined().isBefore(cutoff))
+								.toList();
+
 						if (filteredMembers.isEmpty()) {
-							event.reply("No unverified members found").setEphemeral(true).queue();
-						} else {
-							StringBuilder stringBuilder = new StringBuilder();
-							filteredMembers.forEach((member) -> {
-								stringBuilder.append(member.getId()).append("\n");
-							});
-							String fileContents = stringBuilder.toString();
-							byte[] data = fileContents.getBytes(StandardCharsets.UTF_8);
-							FileUpload file = FileUpload.fromData(data, "output.txt");
-							event.reply(filteredMembers.size() + " unverified members found")
-									.addFiles(file).queue();
+							event.getHook().sendMessage("No unverified members found").queue();
+							return;
 						}
+
+						String fileContents = filteredMembers.stream()
+								.map(Member::getId)
+								.collect(Collectors.joining("\n"));
+
+						byte[] data = fileContents.getBytes(StandardCharsets.UTF_8);
+						FileUpload file = FileUpload.fromData(data, "output.txt");
+
+						event.getHook().sendMessage(filteredMembers.size() + " unverified members found")
+								.addFiles(file)
+								.queue();
 
 					})
 					.onError(err -> {
 						LOGGER.error("Failed to get unverified members", err);
-						event.reply("Failed to get unverified members").setEphemeral(true).queue();
+						event.getHook().sendMessage("Failed to get unverified members").queue();
 					});
 
 		} finally {
