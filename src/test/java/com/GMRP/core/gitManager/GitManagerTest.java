@@ -1,13 +1,14 @@
 package com.GMRP.core.gitManager;
 
-import org.eclipse.jgit.lib.Repository;
+import com.GMRP.core.gitManager.exception.GitManagerException;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class GitManagerTest {
 
@@ -15,56 +16,60 @@ class GitManagerTest {
 	 * Tests for the getCurrentBranch method in the GitManager class.
 	 * <p>
 	 * The getCurrentBranch method is responsible for returning the name of the
-	 * branch the repository is currently on. In case of exceptions, it returns
-	 * "Unknown Branch".
+	 * branch the code is from. In case of exceptions, it returns "Unknown Branch".
 	 */
 
 	@Test
-	void testGetCurrentBranch_ReturnsCorrectBranchName() throws IOException {
+	void testGetCurrentBranch_ReturnsCorrectBranchName() throws Exception {
 		// Arrange
-		String expectedBranchName = "main";
-		Repository mockRepository = mock(Repository.class);
-		when(mockRepository.getBranch()).thenReturn(expectedBranchName);
-
-		GitManager gitManager = new GitManager(mockRepository);
+		String fakeFileContent = "git.branch=main";
+		InputStream fakeStream = new ByteArrayInputStream(fakeFileContent.getBytes());
 
 		// Act
-		String actualBranchName = gitManager.getCurrentBranch();
+		GitManager gitManager = new GitManager(fakeStream);
+		String result = gitManager.getCurrentBranch();
 
 		// Assert
-		assertEquals(expectedBranchName, actualBranchName);
+		assertEquals("main", result);
 	}
 
 	@Test
-	void testGetCurrentBranch_ReturnsUnknownBranch_OnIOException() throws IOException {
+	void testGetCurrentBranch_ThrowsGitManagerExceptionOnError() {
 		// Arrange
-		Repository mockRepository = mock(Repository.class);
-		when(mockRepository.getBranch()).thenThrow(new IOException("Simulated IOException"));
-
-		GitManager gitManager = new GitManager(mockRepository);
-
-		// Act
-		String actualBranchName = gitManager.getCurrentBranch();
-
+		InputStream faultyStream = new InputStream() {
+			@Override
+			public int read() throws IOException {
+				throw new IOException("Simulated read error");
+			}
+		};
+		// Act &
 		// Assert
-		assertEquals("Unknown Branch", actualBranchName);
+		assertThrows(GitManagerException.class, () -> {
+			new GitManager(faultyStream);
+		});
 	}
 
-	// Helper Constructor for Mock Testing
-	private static class GitManager {
-		private final Repository repository;
+	@Test
+	void testGetCurrentBranch_ReturnsUnknownBranch_OnNullInputStream() throws Exception {
+		// Arrange
+		InputStream inputStream = null;
 
-		public GitManager(Repository repository) {
-			this.repository = repository;
-		}
+		// Act
+		GitManager gitManager = new GitManager(inputStream);
 
-		public String getCurrentBranch() {
-			try {
-				return this.repository.getBranch();
-			} catch (IOException e) {
-				e.printStackTrace();
-				return "Unknown Branch";
-			}
-		}
+		// Assert
+		assertEquals("Unknown Branch", gitManager.getCurrentBranch());
+	}
+
+	@Test
+	void testGetCurrentBranch_ReturnsUnknownBranch_OnMissingProperty() throws Exception {
+		// Arrange
+		InputStream inputStream = new ByteArrayInputStream("".getBytes());
+
+		// Act
+		GitManager gitManager = new GitManager(inputStream);
+
+		// Assert
+		assertEquals("Unknown Branch", gitManager.getCurrentBranch());
 	}
 }

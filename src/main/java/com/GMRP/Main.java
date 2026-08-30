@@ -2,13 +2,13 @@
 
 package com.GMRP;
 
-import java.io.IOException;
 import java.util.*;
 
 import com.GMRP.core.databaseManager.exception.DatabaseManagerException;
 import com.GMRP.core.databaseManager.DatabaseManagerFactory;
 import com.GMRP.core.databaseManager.IDatabaseManager;
 import com.GMRP.core.gitManager.GitManager;
+import com.GMRP.core.gitManager.exception.GitManagerException;
 import com.GMRP.features.moderation.botBait.BotBaitEventController;
 import com.GMRP.features.aboutCommand.AboutCommandController;
 import com.GMRP.features.helpCommand.HelpCommandController;
@@ -84,9 +84,9 @@ public class Main {
 
 	private void initGitManager() {
 		try {
-			gitManager = new GitManager(".");
+			gitManager = new GitManager();
 			LOGGER.debug("GitManager initialized");
-		} catch (IOException e) {
+		} catch (GitManagerException e) {
 			LOGGER.error("Failed to initialize GitManager", e);
 			throw new RuntimeException(e);
 		}

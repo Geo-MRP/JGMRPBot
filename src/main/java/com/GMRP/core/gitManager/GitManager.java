@@ -2,25 +2,40 @@
 
 package com.GMRP.core.gitManager;
 
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import com.GMRP.core.gitManager.exception.GitManagerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
+import java.io.InputStream;
+import java.util.Properties;
 import java.io.IOException;
 
 public class GitManager {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(GitManager.class);
-	private final Repository repository;
 
-	public GitManager(String path) throws IOException {
-		FileRepositoryBuilder builder = new FileRepositoryBuilder();
-		this.repository = builder.setGitDir(new File(path, ".git"))
-				.readEnvironment() // scan environment GIT_* variables
-				.findGitDir() // scan up the file system tree
-				.build();
+	private final Properties gitProperties = new Properties();
+	private static final String BRANCH_UNKNOWN = "Unknown Branch";
+
+	public GitManager() throws GitManagerException {
+		this(GitManager.class.getResourceAsStream("git.properties"));
+	}
+
+	GitManager(InputStream inputStream) throws GitManagerException {
+		loadGitProperties(inputStream);
+	}
+
+	/**
+	 * Load git.properties from the classpath
+	 */
+	private void loadGitProperties(InputStream inputStream) throws GitManagerException {
+		try (InputStream stream = inputStream) {
+			if (stream != null)
+				gitProperties.load(stream);
+		} catch (IOException e) {
+			LOGGER.error("Failed to load git.properties", e);
+			throw new GitManagerException("Failed to load git.properties", e);
+		}
 	}
 
 	/**
@@ -30,11 +45,6 @@ public class GitManager {
 	 *         repository is currently in. e.g. "origin/main"
 	 */
 	public String getCurrentBranch() {
-		try {
-			return this.repository.getBranch();
-		} catch (IOException e) {
-			LOGGER.error("Failed to get current branch", e);
-			return "Unknown Branch";
-		}
+		return gitProperties.getProperty("git.branch", BRANCH_UNKNOWN);
 	}
 }
