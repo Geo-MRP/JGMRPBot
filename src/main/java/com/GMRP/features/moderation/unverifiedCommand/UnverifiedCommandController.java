@@ -18,12 +18,14 @@ import org.slf4j.MDC;
 
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
+import java.time.Period;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class UnverifiedCommandController extends ListenerAdapter implements ISlashCommandController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(UnverifiedCommandController.class);
+	private static final Period BUFFER = Period.ofMonths(6);
 
 	private final IDatabaseManager databaseManager;
 
@@ -68,25 +70,16 @@ public class UnverifiedCommandController extends ListenerAdapter implements ISla
 				return;
 			}
 
-			OffsetDateTime cutoff = OffsetDateTime.now().minusMonths(6);
-
 			event.getGuild().findMembersWithRoles(role)
 					.onSuccess(list -> {
-						List<Member> filteredMembers = list.stream()
-								.filter(Member::hasTimeJoined)
-								.filter(member -> member.getTimeJoined().isBefore(cutoff))
-								.toList();
+						List<Member> filteredMembers = getUnverifiedMembers(list);
 
 						if (filteredMembers.isEmpty()) {
 							event.getHook().sendMessage("No unverified members found").queue();
 							return;
 						}
 
-						String fileContents = filteredMembers.stream()
-								.map(Member::getId)
-								.collect(Collectors.joining("\n"));
-
-						byte[] data = fileContents.getBytes(StandardCharsets.UTF_8);
+						byte[] data = createFileContents(filteredMembers);
 						FileUpload file = FileUpload.fromData(data, "output.txt");
 
 						event.getHook().sendMessage(filteredMembers.size() + " unverified members found")
@@ -102,5 +95,20 @@ public class UnverifiedCommandController extends ListenerAdapter implements ISla
 		} finally {
 			MDC.clear();
 		}
+	}
+
+	private List<Member> getUnverifiedMembers(List<Member> members) {
+		OffsetDateTime cutoff = OffsetDateTime.now().minus(BUFFER);
+		return members.stream()
+				.filter(Member::hasTimeJoined)
+				.filter(member -> member.getTimeJoined().isBefore(cutoff))
+				.toList();
+	}
+
+	private byte[] createFileContents(List<Member> members) {
+		return members.stream()
+				.map(Member::getId)
+				.collect(Collectors.joining("\n"))
+				.getBytes(StandardCharsets.UTF_8);
 	}
 }
