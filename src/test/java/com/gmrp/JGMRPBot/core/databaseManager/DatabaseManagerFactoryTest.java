@@ -26,7 +26,7 @@ public class DatabaseManagerFactoryTest {
 			botConfig.when(BotConfig::getInstance)
 					.thenReturn(config);
 
-			IDatabaseManager manager = DatabaseManagerFactory.create();
+			DatabaseManager manager = DatabaseManagerFactory.create();
 
 			assertInstanceOf(DatabaseManagerSQLite.class, manager);
 		}
@@ -42,7 +42,7 @@ public class DatabaseManagerFactoryTest {
 			botConfig.when(BotConfig::getInstance)
 					.thenReturn(config);
 
-			IDatabaseManager manager = DatabaseManagerFactory.create();
+			DatabaseManager manager = DatabaseManagerFactory.create();
 
 			assertInstanceOf(DatabaseManagerSQLite.class, manager);
 		}
@@ -60,7 +60,7 @@ public class DatabaseManagerFactoryTest {
 			botConfig.when(BotConfig::getInstance)
 					.thenReturn(config);
 
-			IDatabaseManager manager = DatabaseManagerFactory.create();
+			DatabaseManager manager = DatabaseManagerFactory.create();
 
 			assertInstanceOf(DatabaseManagerOracle.class, manager);
 		}

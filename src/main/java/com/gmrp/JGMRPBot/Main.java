@@ -6,7 +6,7 @@ import java.util.*;
 
 import com.gmrp.JGMRPBot.core.databaseManager.exception.DatabaseManagerException;
 import com.gmrp.JGMRPBot.core.databaseManager.DatabaseManagerFactory;
-import com.gmrp.JGMRPBot.core.databaseManager.IDatabaseManager;
+import com.gmrp.JGMRPBot.core.databaseManager.DatabaseManager;
 import com.gmrp.JGMRPBot.core.gitManager.GitManager;
 import com.gmrp.JGMRPBot.core.gitManager.exception.GitManagerException;
 import com.gmrp.JGMRPBot.features.moderation.botBait.BotBaitEventController;
@@ -16,8 +16,8 @@ import com.gmrp.JGMRPBot.features.moderation.botBait.BotBaitView;
 import com.gmrp.JGMRPBot.features.aboutCommand.AboutEmbedView;
 import com.gmrp.JGMRPBot.features.aboutCommand.VersionReader;
 import com.gmrp.JGMRPBot.features.helpCommand.HelpEmbedView;
-import com.gmrp.JGMRPBot.features.ISlashCommandController;
-import com.gmrp.JGMRPBot.features.IEventListenerController;
+import com.gmrp.JGMRPBot.features.SlashCommandController;
+import com.gmrp.JGMRPBot.features.EventListenerController;
 import com.gmrp.JGMRPBot.views.shared.BotEmbedBuilder;
 
 import net.dv8tion.jda.api.JDA;
@@ -33,12 +33,12 @@ public class Main {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
 	private GitManager gitManager;
-	private IDatabaseManager databaseManager;
+	private DatabaseManager databaseManager;
 
 	private final String version = VersionReader.getVersion();
 
-	private final List<ISlashCommandController> slashCommands = new ArrayList<>();
-	private final List<IEventListenerController> eventListeners = new ArrayList<>();
+	private final List<SlashCommandController> slashCommands = new ArrayList<>();
+	private final List<EventListenerController> eventListeners = new ArrayList<>();
 
 	static void main(String[] args) {
 		new Main().start(args);
@@ -123,7 +123,7 @@ public class Main {
 		HelpEmbedView helpEmbedView = new HelpEmbedView();
 		slashCommands.add(new HelpCommandController(helpEmbedView));
 
-		for (ISlashCommandController controller : slashCommands) {
+		for (SlashCommandController controller : slashCommands) {
 			builder.addEventListeners(controller); // Tell JDA to listen to them
 		}
 		LOGGER.debug("Added {} slash commands", slashCommands.size());
@@ -133,7 +133,7 @@ public class Main {
 		BotBaitView botBaitEmbedView = new BotBaitView();
 		eventListeners.add(new BotBaitEventController(botBaitEmbedView, databaseManager));
 
-		for (IEventListenerController eventListener : eventListeners) {
+		for (EventListenerController eventListener : eventListeners) {
 			builder.addEventListeners(eventListener);
 		}
 		LOGGER.debug("Added {} event listeners", eventListeners.size());
@@ -141,7 +141,7 @@ public class Main {
 
 	private void pushCommandsToGuild(Guild guild) {
 		List<SlashCommandData> commandSetups = new ArrayList<>(slashCommands.size());
-		for (ISlashCommandController controller : slashCommands) {
+		for (SlashCommandController controller : slashCommands) {
 			commandSetups.add(controller.getCommandSetup());
 		}
 

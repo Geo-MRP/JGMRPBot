@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Database access point supporting SQLite.
  */
-public class DatabaseManagerSQLite implements IDatabaseManager {
+public class DatabaseManagerSQLite implements DatabaseManager {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseManagerSQLite.class);
 

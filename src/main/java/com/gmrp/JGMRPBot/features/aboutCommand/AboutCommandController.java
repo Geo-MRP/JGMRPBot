@@ -2,10 +2,10 @@
 
 package com.gmrp.JGMRPBot.features.aboutCommand;
 
-import com.gmrp.JGMRPBot.core.databaseManager.IDatabaseManager;
+import com.gmrp.JGMRPBot.core.databaseManager.DatabaseManager;
 import com.gmrp.JGMRPBot.core.databaseManager.exception.DatabaseManagerException;
 import com.gmrp.JGMRPBot.core.gitManager.GitManager;
-import com.gmrp.JGMRPBot.features.ISlashCommandController;
+import com.gmrp.JGMRPBot.features.SlashCommandController;
 
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -16,18 +16,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
-public class AboutCommandController extends ListenerAdapter implements ISlashCommandController {
+public class AboutCommandController extends ListenerAdapter implements SlashCommandController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AboutCommandController.class);
 
 	private final AboutEmbedView view;
 	private final GitManager gitManager;
-	private final IDatabaseManager databaseManager;
+	private final DatabaseManager databaseManager;
 
 	// Constructor necessary due to having a View and/or Model.
 	// We don't want to create a new instance of a View or Model each time the
 	// command is run.
-	public AboutCommandController(AboutEmbedView view, GitManager gitManager, IDatabaseManager databaseManager) {
+	public AboutCommandController(AboutEmbedView view, GitManager gitManager, DatabaseManager databaseManager) {
 		this.view = view;
 		this.gitManager = gitManager;
 		this.databaseManager = databaseManager;

@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Database Manager for Oracle (UCP)
  */
-public class DatabaseManagerOracle implements IDatabaseManager {
+public class DatabaseManagerOracle implements DatabaseManager {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseManagerOracle.class);
 

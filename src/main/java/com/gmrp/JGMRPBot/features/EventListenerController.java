@@ -4,5 +4,5 @@ package com.gmrp.JGMRPBot.features;
 
 import net.dv8tion.jda.api.hooks.EventListener;
 
-public interface IEventListenerController extends EventListener {
+public interface EventListenerController extends EventListener {
 }

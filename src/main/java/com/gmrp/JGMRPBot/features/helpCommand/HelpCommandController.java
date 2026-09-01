@@ -2,7 +2,7 @@
 
 package com.gmrp.JGMRPBot.features.helpCommand;
 
-import com.gmrp.JGMRPBot.features.ISlashCommandController;
+import com.gmrp.JGMRPBot.features.SlashCommandController;
 
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
-public class HelpCommandController extends ListenerAdapter implements ISlashCommandController {
+public class HelpCommandController extends ListenerAdapter implements SlashCommandController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(HelpCommandController.class);
 
 	private final HelpEmbedView view;

@@ -20,8 +20,8 @@ The bot currently supports two kinds of feature modules:
 
 | Type            | Interface | Purpose                   | Example           |
 |-----------------|-----------|---------------------------|-------------------|
-| Slash Commands  | `ISlashCommandController` | User-invoked `/commands`  | `/about`, `/help` |
-| Event Listeners | `IEventListenerController` | Listen for Discord events | Bot-bait honeypot |
+| Slash Commands  | `SlashCommandController` | User-invoked `/commands`  | `/about`, `/help` |
+| Event Listeners | `EventListenerController` | Listen for Discord events | Bot-bait honeypot |
 
 ## Package structure
 ```
@@ -62,7 +62,7 @@ com.GMRP
 1. `BotConfig.init()` – loads environment variables (token, DB settings, etc.).
 2. Create Core Models:
     - `GitManager` (repository info)
-    - `IDatabaseManager` (connection pool / SQLite)
+    - `DatabaseManager` (connection pool / SQLite)
         - With a shutdown hook to close the pool.
 3. Instantiate feature modules (controllers + views).
 4. Register every controller as a JDA event listener.
@@ -85,11 +85,11 @@ Singleton that reads configuration from environment variables:
 
 Most runtime values that used to live in environment variables (owner ID, server ID, bait channel) are now stored in the `CONFIG` table and queried at runtime.
 
-### Database access (`IDatabaseManager`)
+### Database access (`DatabaseManager`)
 
 Provides a single entry point for database access:
 
-- **`IDatabaseManager`** – interface used by the rest of the app (`getConfigKey()`, `testConnection()`, `close()`).
+- **`DatabaseManager`** – interface used by the rest of the app (`getConfigKey()`, `testConnection()`, `close()`).
 - **`DatabaseManagerOracle`** / **`DatabaseManagerSQLite`** – concrete DB implementations.
 - **`DatabaseManagerFactory.create()`** – picks the implementation from `DB_TYPE` (Oracle vs SQLite).
 
@@ -101,7 +101,7 @@ Schema and seed data live in `src/main/resources/db/`.
 
 #### Slash commands
 
-Implement `ISlashCommandController` (which extends JDA’s `EventListener`):
+Implement `SlashCommandController` (which extends JDA’s `EventListener`):
 
 1. Provide `getCommandSetup()` – returns the `SlashCommandData` (name, description, options).
 2. Override the appropriate JDA event method (usually `onSlashCommandInteraction`).
@@ -112,7 +112,7 @@ Controllers receive their dependencies (View, IDatabaseManager, GitManager, …)
 
 #### Event loops / moderation
 
-Implement `IEventListenerController` (also an `EventListener`).  
+Implement `EventListenerController` (also an `EventListener`).  
 These react to continuous events such as `MessageReceivedEvent`. The Bot-bait module is the current example: it watches a configured channel and bans accounts that post there (typical self-bot bait).
 
 ### Views & embeds
@@ -124,7 +124,7 @@ These react to continuous events such as `MessageReceivedEvent`. The Bot-bait mo
 ## Adding a new slash command
 
 1. Create a new package under `features/` (e.g. `features/pingCommand/`).
-2. Add a `CommandController` that implements `ISlashCommandController` and extends `ListenerAdapter`.
+2. Add a `CommandController` that implements `SlashCommandController` and extends `ListenerAdapter`.
 3. Add a corresponding `EmbedView` (or reuse `BotEmbedBuilder` directly for very simple replies).
 4. In `Main`:
     - Instantiate the view and controller.
@@ -136,7 +136,7 @@ These react to continuous events such as `MessageReceivedEvent`. The Bot-bait mo
 ## Adding a new event-driven feature
 
 1. Create a package under the appropriate category (e.g. `features/moderation/...`).
-2. Implement `IEventListenerController`.
+2. Implement `EventListenerController`.
 3. Register the controller in the `eventListeners` list inside `Main`.
 4. Follow the same testing and formatting rules as above.
 

@@ -10,7 +10,7 @@ public final class DatabaseManagerFactory {
 	private DatabaseManagerFactory() {
 	}
 
-	public static IDatabaseManager create() throws DatabaseManagerException {
+	public static DatabaseManager create() throws DatabaseManagerException {
 		String dbType = BotConfig.getInstance().getDbType().toLowerCase();
 		if ("oracle".equals(dbType)) {
 			return new DatabaseManagerOracle();

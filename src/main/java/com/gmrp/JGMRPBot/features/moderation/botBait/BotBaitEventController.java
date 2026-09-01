@@ -3,8 +3,8 @@
 package com.gmrp.JGMRPBot.features.moderation.botBait;
 
 import com.gmrp.JGMRPBot.core.databaseManager.exception.DatabaseManagerException;
-import com.gmrp.JGMRPBot.core.databaseManager.IDatabaseManager;
-import com.gmrp.JGMRPBot.features.IEventListenerController;
+import com.gmrp.JGMRPBot.core.databaseManager.DatabaseManager;
+import com.gmrp.JGMRPBot.features.EventListenerController;
 
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -17,14 +17,14 @@ import org.slf4j.MDC;
 
 import java.util.concurrent.TimeUnit;
 
-public class BotBaitEventController extends ListenerAdapter implements IEventListenerController {
+public class BotBaitEventController extends ListenerAdapter implements EventListenerController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BotBaitEventController.class);
 
 	BotBaitView view;
-	IDatabaseManager databaseManager;
+	DatabaseManager databaseManager;
 
-	public BotBaitEventController(BotBaitView view, IDatabaseManager databaseManager) {
+	public BotBaitEventController(BotBaitView view, DatabaseManager databaseManager) {
 		this.view = view;
 		this.databaseManager = databaseManager;
 	}

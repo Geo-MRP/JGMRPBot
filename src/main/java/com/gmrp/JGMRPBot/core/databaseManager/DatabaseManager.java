@@ -8,7 +8,7 @@ import com.gmrp.JGMRPBot.core.databaseManager.exception.DatabaseManagerException
  * Database access point. Implementations exist for Oracle (UCP) and SQLite.
  * Designed for constructor-based dependency injection.
  */
-public interface IDatabaseManager extends AutoCloseable {
+public interface DatabaseManager extends AutoCloseable {
 
 	/**
 	 * Simple connectivity check. Useful at startup or in tests.
