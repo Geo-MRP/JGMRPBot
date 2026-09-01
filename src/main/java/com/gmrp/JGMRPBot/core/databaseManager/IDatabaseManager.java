@@ -1,0 +1,28 @@
+/* SPDX-License-Identifier: AGPL-3.0-or-later */
+
+package com.gmrp.JGMRPBot.core.databaseManager;
+
+import com.gmrp.JGMRPBot.core.databaseManager.exception.DatabaseManagerException;
+
+/**
+ * Database access point. Implementations exist for Oracle (UCP) and SQLite.
+ * Designed for constructor-based dependency injection.
+ */
+public interface IDatabaseManager extends AutoCloseable {
+
+	/**
+	 * Simple connectivity check. Useful at startup or in tests.
+	 */
+	boolean testConnection();
+
+	/**
+	 * Releases any resources (e.g. Oracle connection pool). No-op for SQLite.
+	 */
+	@Override
+	void close();
+
+	/**
+	 * Get the value of a specific configuration key
+	 */
+	String getConfigKey(String key) throws DatabaseManagerException;
+}
