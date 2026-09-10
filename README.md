@@ -2,7 +2,7 @@
 Copyright (C) 2026 NickFury001
 SPDX-License-Identifier: AGPL-3.0-or-later
 -->
-# Java GeoFS Military Roleplay Bot
+<h1 align="center">Java GeoFS Military Roleplay Bot</h1>
 
 <p align="center">
   <img src="./src/main/resources/assets/images/logo.png" width=30% height=30% />
@@ -10,6 +10,12 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 <p align="center">
   An open-source Java port of the original closed-source python-based GMRP Discord Bot.
+</p>
+
+<p align="center">
+  <a href="https://github.com/Geo-MRP/JGMRPBot/actions"><img src="https://img.shields.io/github/actions/workflow/status/Geo-MRP/JGMRPBot/ci.yml?branch=develop&style=for-the-badge&logo=githubactions&logoColor=white" alt="Build Status"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/Geo-MRP/JGMRPBot?style=for-the-badge&color=blue" alt="License"></a>
+  <a href="https://www.oracle.com/java/technologies/downloads/"><img src="https://img.shields.io/badge/Java-26-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java 26"></a>
 </p>
 
 ---
